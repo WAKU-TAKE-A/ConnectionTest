@@ -78,7 +78,7 @@
                 <TextBox Text="{Binding Path=Ip3dst}" Width="40"/>
             </StackPanel>
             <Button Content="接続チェック(ping)" Command="{Binding Path=PingCommand}"/>
-            <Button Content="自分のネットワーク状況確認(ipconfig)" Command="{Binding Path=IpconfigCommand}"/>
+            <Button Content="ネットワーク状況確認(ipconfig)" Command="{Binding Path=IpconfigCommand}"/>
             <Button Content="接続可能なIPの確認" Command="{Binding Path=PingAllCommand}"/>
         </StackPanel>
         <TextBox Grid.Column="1" Text="{Binding Path=ResultText}" AcceptsReturn="True" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto" VerticalAlignment="Stretch" FontSize="16"/>
