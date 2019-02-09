@@ -144,7 +144,7 @@ namespace ConnectionTest.ViewModels
                 _SlctdInterface = value;
                 RaisePropertyChanged();
 
-                if (info.IP.Count == 0)
+                if (info.IP.Count == 0 || info.IP[SlctdInterface] == null)
                 {
                     Ip0 = Ip1 = Ip2 = Ip3 = 0;
                     Msk0 = Msk1 = Msk2 = Msk3 = 0;
@@ -302,6 +302,24 @@ namespace ConnectionTest.ViewModels
         }
         #endregion
 
+        #region EnDhcp変更通知プロパティ
+        private bool _EnDhcp = false;
+
+        public bool EnDhcp
+        {
+            get
+            { return _EnDhcp; }
+            set
+            { 
+                if (_EnDhcp == value)
+                    return;
+                _EnDhcp = value;
+                RaisePropertyChanged();
+            }
+        }
+        #endregion
+
+
         #region Ip0dst変更通知プロパティ
         private int _Ip0dst = 192;
 
@@ -446,16 +464,31 @@ namespace ConnectionTest.ViewModels
             }
 
             Mouse.OverrideCursor = Cursors.Wait;
-            string str_cmd = string.Format(
-                "netsh interface ip set address \"{0}\" static {1}.{2}.{3}.{4} {5}.{6}.{7}.{8}",
-                Interface[SlctdInterface],
-                Ip0, Ip1, Ip2, Ip3,
-                Msk0, Msk1, Msk2, Msk3);
+
+            string str_cmd = "";
+
+            if (EnDhcp)
+            {
+                str_cmd = string.Format(
+                    "netsh interface ip set address \"{0}\" dhcp",
+                    Interface[SlctdInterface]);
+            }
+            else
+            {
+                str_cmd = string.Format(
+                    "netsh interface ip set address \"{0}\" static {1}.{2}.{3}.{4} {5}.{6}.{7}.{8}",
+                    Interface[SlctdInterface],
+                    Ip0, Ip1, Ip2, Ip3,
+                    Msk0, Msk1, Msk2, Msk3);
+            }
+
+
             bool bret = cmd.Run(str_cmd);
 
             if (bret)
             {
                 ResultText = cmd.StandardOutput;
+                RefreshIP();
             }
             else
             {

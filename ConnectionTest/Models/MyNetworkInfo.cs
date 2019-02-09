@@ -62,6 +62,13 @@ namespace ConnectionTest.Models
                             Mask.Add(ip.IPv4Mask.ToString());
                         }
                     }
+
+                    if (Interface.Count == 0)
+                    {
+                        Interface.Add(ni.Name);
+                        IP.Add(null);
+                        Mask.Add(null);
+                    }
                 }
             }
         }

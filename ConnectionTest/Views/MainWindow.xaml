@@ -62,6 +62,7 @@
                 <Label Content="."/>
                 <TextBox Text="{Binding Path=Msk3}" Width="40"/>
             </StackPanel>
+            <CheckBox Content="DHCPをONに設定" IsChecked="{Binding Path=EnDhcp}"/>
             <StackPanel Orientation="Horizontal">
                 <Button Content="IPの再取得" Command="{Binding Path=RefreshIPCommand}" Width="100"/>
                 <Button Content="上記設定に変更" Command="{Binding Path=SetIPCommand}" Width="100"/>
