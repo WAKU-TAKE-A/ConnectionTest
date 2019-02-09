@@ -1,7 +1,9 @@
 # ConnectionTest
 
 自分のIPアドレスを取得します。<br>
-また"ping"、"ipconfig"、"netsh interface ip set address"などをGUIから利用します。
+また「ping」、「ipconfig」、「netsh interface ip set address」などをGUIから利用します。
+
+Visual Studio 2015のソリューションです。MVVMのインフラストラクチャー「Livet」を使っています。
 
 「DOBON.NET」の
 
@@ -15,3 +17,5 @@
 * [「WindowsのnetshコマンドでTCP/IPのパラメータを設定する」](http://www.atmarkit.co.jp/ait/articles/1002/05/news097.html)
 
 などを参考にしました。
+
+![ConnectionTest001.jp](https://raw.githubusercontent.com/WAKU-TAKE-A/ConnectionTest/master/img/ConnectionTest001.jpg)
