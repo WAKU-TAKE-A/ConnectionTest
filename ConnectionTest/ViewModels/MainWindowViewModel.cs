@@ -68,21 +68,25 @@ namespace ConnectionTest.ViewModels
 
         public void Initialize()
         {
-            if (NetworkInterface.GetIsNetworkAvailable())
-            {
-                StatusConnection = "ネットに接続しています";
-            }
-            else
-            {
-                StatusConnection = "ネットに接続していません";
-            }
+            checkStatusConnection();
 
             NetworkChange.NetworkAvailabilityChanged += new NetworkAvailabilityChangedEventHandler(NetworkChange_NetworkAvailabilityChanged);
+            NetworkChange.NetworkAddressChanged += new NetworkAddressChangedEventHandler(NetworkChange_NetworkAddressChanged);
+        }
+
+        private void NetworkChange_NetworkAddressChanged(object sender, EventArgs e)
+        {
+            checkStatusConnection();
         }
 
         private void NetworkChange_NetworkAvailabilityChanged(object sender, NetworkAvailabilityEventArgs e)
         {
-            if (e.IsAvailable)
+            checkStatusConnection();
+        }
+
+        private void checkStatusConnection()
+        {
+            if (NetworkInterface.GetIsNetworkAvailable())
             {
                 StatusConnection = "ネットに接続しています";
             }
@@ -632,9 +636,5 @@ namespace ConnectionTest.ViewModels
             Mouse.OverrideCursor = null;
         }
         #endregion
-
-
-
-
     }
 }
