@@ -107,6 +107,10 @@ namespace ConnectionTest.ViewModels
                 //    return;
                 _StatusConnection = value;
                 RaisePropertyChanged();
+                
+                RefreshIPCommand.RaiseCanExecuteChanged();
+                PingCommand.RaiseCanExecuteChanged();
+                PingAllCommand.RaiseCanExecuteChanged();
 
                 RefreshIP();
             }
@@ -318,7 +322,6 @@ namespace ConnectionTest.ViewModels
             }
         }
         #endregion
-
 
         #region Ip0dst変更通知プロパティ
         private int _Ip0dst = 192;
