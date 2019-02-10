@@ -6,7 +6,7 @@
         xmlns:l="http://schemas.livet-mvvm.net/2011/wpf"
         xmlns:v="clr-namespace:ConnectionTest.Views"
         xmlns:vm="clr-namespace:ConnectionTest.ViewModels"
-        Title="{Binding Path=MyVersion}" Height="400" Width="600">
+        Title="{Binding Path=MyVersion}" Height="500" Width="600">
     
     <Window.DataContext>
         <vm:MainWindowViewModel/>
