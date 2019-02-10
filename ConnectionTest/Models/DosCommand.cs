@@ -34,7 +34,7 @@ namespace ConnectionTest.Models
             //ウィンドウを表示しないようにする
             p.StartInfo.CreateNoWindow = true;
             
-            //コマンドラインを指定（"/c"は実行後閉じるために必要、@をつけると\"などがうまくいきません）
+            //コマンドラインを指定（"/c"は実行後閉じるために必要）
             p.StartInfo.Arguments = "/c " + command;
 
             //起動

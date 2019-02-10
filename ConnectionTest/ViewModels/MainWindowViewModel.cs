@@ -68,6 +68,9 @@ namespace ConnectionTest.ViewModels
 
         public void Initialize()
         {
+            var asm = System.Reflection.Assembly.GetExecutingAssembly();
+            MyVersion = "ConnectionTest " + asm.GetName().Version.ToString();
+
             checkStatusConnection();
 
             NetworkChange.NetworkAvailabilityChanged += new NetworkAvailabilityChangedEventHandler(NetworkChange_NetworkAvailabilityChanged);
@@ -97,6 +100,23 @@ namespace ConnectionTest.ViewModels
         }
 
         // 変更通知プロパティ
+
+        #region MyVersion変更通知プロパティ
+        private string _MyVersion = "***";
+
+        public string MyVersion
+        {
+            get
+            { return _MyVersion; }
+            set
+            { 
+                if (_MyVersion == value)
+                    return;
+                _MyVersion = value;
+                RaisePropertyChanged();
+            }
+        }
+        #endregion
 
         #region StatusConnection変更通知プロパティ
         private string _StatusConnection = "***";
@@ -395,6 +415,23 @@ namespace ConnectionTest.ViewModels
         }
         #endregion
 
+        #region Timeout_ms変更通知プロパティ
+        private int _Timeout_ms = 200;
+
+        public int Timeout_ms
+        {
+            get
+            { return _Timeout_ms; }
+            set
+            { 
+                if (_Timeout_ms == value)
+                    return;
+                _Timeout_ms = value;
+                RaisePropertyChanged();
+            }
+        }
+        #endregion
+
         #region ResultText変更通知プロパティ
         private string _ResultText = "";
 
@@ -460,7 +497,7 @@ namespace ConnectionTest.ViewModels
         public void SetIP()
         {
             var dialog_res = System.Windows.Forms.MessageBox.Show(
-                "「ｺﾝﾄﾛｰﾙ ﾊﾟﾈﾙ」の「ﾈｯﾄﾜｰｸと共有ｾﾝﾀｰ」の設定を書き換えます。よろしいですか？",
+                "「コントロールパネル」の「ネットワークと共有センター」の設定を書き換えます。よろしいですか？",
                 "質問",
                 System.Windows.Forms.MessageBoxButtons.YesNo,
                 System.Windows.Forms.MessageBoxIcon.Question);
@@ -529,7 +566,7 @@ namespace ConnectionTest.ViewModels
         public void Ping()
         {
             Mouse.OverrideCursor = Cursors.Wait;
-            bool bret = cmd.Run(string.Format("ping {0}.{1}.{2}.{3} -n 1 -w 50", Ip0dst, Ip1dst, Ip2dst, Ip3dst));
+            bool bret = cmd.Run(string.Format("ping {0}.{1}.{2}.{3} -n 1 -w {4}", Ip0dst, Ip1dst, Ip2dst, Ip3dst, Timeout_ms));
             ResultText = cmd.StandardOutput;
 
             if (bret)
@@ -622,7 +659,7 @@ namespace ConnectionTest.ViewModels
                 if (i != Ip3)
                 {
                     string ip = string.Format("{0}.{1}.{2}.{3}", Ip0, Ip1, Ip2, i);
-                    var rep = png.Send(ip, 100);
+                    var rep = png.Send(ip, Timeout_ms);
 
                     if (rep.Status == IPStatus.Success)
                     {
