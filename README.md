@@ -19,9 +19,13 @@ Visual Studio 2015のソリューションです。MVVMのインフラストラ�
 
 などを参考にしました。
 
+# バイナリー
+
+[Release](https://github.com/WAKU-TAKE-A/ConnectionTest/releases) にx86版の実行ファイルをおいておきます。
+
 # 使い方の概要
 
-![ConnectionTest001.jp](https://raw.githubusercontent.com/WAKU-TAKE-A/ConnectionTest/master/img/ConnectionTest001.jpg)
+![ConnectionTest001.jpg](https://raw.githubusercontent.com/WAKU-TAKE-A/ConnectionTest/master/img/ConnectionTest001.jpg)
 
 ネットワークに接続されていれば、「ネットワークアダプタ」にアダプタ名が表示されます。
 
@@ -29,11 +33,11 @@ Visual Studio 2015のソリューションです。MVVMのインフラストラ�
 
 基本的に自分のIPアドレスが変化した時は自動で、「アダプタ名」や「自分のIPアドレス」は変更されますが、「IPの再取得」を押すことで強制的に更新することも可能です。
 
-「自分の***」のテキストボックスを変更し、「上記設定に変更」ボタンを押すことで所望の値に変更することができます。ただし、管理者権限で本アプリを起動していなくてはなりません。
+「自分の～」のテキストボックスを変更し、「上記設定に変更」ボタンを押すことで所望の値に変更することができます。「DHCPをONに設定」をONにするとDHCPを有効にします。ただし、管理者権限で本アプリを起動していなくてはなりません。
 
 「接続チェック(ping))」はDOSコマンドのping、「ネット状況確認(ipconfig))」はipconfigです。
 
-「接続可能なIPの確認」は、第4オクテットを1～255（自分を除く）の全てにpingを行います。
+「接続可能なIPの確認」は、第4オクテットを1～255（自分を除く）の全てにpingを行います。（遅いです。要勉強。）
 
 # ライセンス
 
