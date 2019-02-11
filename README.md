@@ -1,7 +1,8 @@
 # ConnectionTest
 
-自分のIPアドレスを取得します。<br>
-また「ping」、「ipconfig」、「netsh interface ip set address」などをGUIから利用します。
+自分のIPアドレスを取得・設定します。また「ping」、「ipconfig」、「netsh interface ip set address」などのDOSコマンドをGUIから利用します。
+
+基本的な接続チェック、およびIPアドレスの設定を行う時に利用することを想定しています。
 
 Visual Studio 2015のソリューションです。MVVMのインフラストラクチャー「Livet」を使っています。
 
