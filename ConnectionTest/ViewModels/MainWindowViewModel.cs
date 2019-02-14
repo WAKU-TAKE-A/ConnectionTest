@@ -16,6 +16,7 @@ using ConnectionTest.Models;
 // user add
 using System.Net.NetworkInformation;
 using System.Windows.Input;
+using System.Threading.Tasks;
 
 namespace ConnectionTest.ViewModels
 {
@@ -184,11 +185,24 @@ namespace ConnectionTest.ViewModels
                     Ip1 = int.Parse(ips[1]);
                     Ip2 = int.Parse(ips[2]);
                     Ip3 = int.Parse(ips[3]);
-                    string[] msks = info.Mask[value].Split('.');
+                    string[] msks = info.SubnetMask[value].Split('.');
                     Msk0 = int.Parse(msks[0]);
                     Msk1 = int.Parse(msks[1]);
                     Msk2 = int.Parse(msks[2]);
                     Msk3 = int.Parse(msks[3]);
+                }
+
+                if (info.IP.Count == 0 || info.Gateway[SlctdInterface] == null)
+                {
+                    Gate0 = Gate1 = Gate2 = Gate3 = 0;
+                }
+                else
+                {
+                    string[] gts = info.Gateway[value].Split('.');
+                    Gate0 = int.Parse(gts[0]);
+                    Gate1 = int.Parse(gts[1]);
+                    Gate2 = int.Parse(gts[2]);
+                    Gate3 = int.Parse(gts[3]);
                 }
             }
         }
@@ -325,6 +339,74 @@ namespace ConnectionTest.ViewModels
                 if (_Msk3 == value)
                     return;
                 _Msk3 = value;
+                RaisePropertyChanged();
+            }
+        }
+        #endregion
+
+        #region Gate0変更通知プロパティ
+        private int _Gate0 = 0;
+
+        public int Gate0
+        {
+            get
+            { return _Gate0; }
+            set
+            {
+                if (_Gate0 == value)
+                    return;
+                _Gate0 = value;
+                RaisePropertyChanged();
+            }
+        }
+        #endregion
+
+        #region Gate1変更通知プロパティ
+        private int _Gate1 = 0;
+
+        public int Gate1
+        {
+            get
+            { return _Gate1; }
+            set
+            {
+                if (_Gate1 == value)
+                    return;
+                _Gate1 = value;
+                RaisePropertyChanged();
+            }
+        }
+        #endregion
+
+        #region Gate2変更通知プロパティ
+        private int _Gate2 = 0;
+
+        public int Gate2
+        {
+            get
+            { return _Gate2; }
+            set
+            {
+                if (_Gate2 == value)
+                    return;
+                _Gate2 = value;
+                RaisePropertyChanged();
+            }
+        }
+        #endregion
+
+        #region Gate3変更通知プロパティ
+        private int _Gate3 = 0;
+
+        public int Gate3
+        {
+            get
+            { return _Gate3; }
+            set
+            {
+                if (_Gate3 == value)
+                    return;
+                _Gate3 = value;
                 RaisePropertyChanged();
             }
         }
@@ -519,11 +601,23 @@ namespace ConnectionTest.ViewModels
             }
             else
             {
-                str_cmd = string.Format(
-                    "netsh interface ip set address \"{0}\" static {1}.{2}.{3}.{4} {5}.{6}.{7}.{8}",
-                    Interface[SlctdInterface],
-                    Ip0, Ip1, Ip2, Ip3,
-                    Msk0, Msk1, Msk2, Msk3);
+                if (Gate0 == 0 && Gate1 == 0 && Gate2 == 0 && Gate3 == 0)
+                {
+                    str_cmd = string.Format(
+                        "netsh interface ip set address \"{0}\" static {1}.{2}.{3}.{4} {5}.{6}.{7}.{8}",
+                        Interface[SlctdInterface],
+                        Ip0, Ip1, Ip2, Ip3,
+                        Msk0, Msk1, Msk2, Msk3);
+                }
+                else
+                {
+                    str_cmd = string.Format(
+                        "netsh interface ip set address \"{0}\" static {1}.{2}.{3}.{4} {5}.{6}.{7}.{8} {9}.{10}.{11}.{12}",
+                        Interface[SlctdInterface],
+                        Ip0, Ip1, Ip2, Ip3,
+                        Msk0, Msk1, Msk2, Msk3,
+                        Gate0, Gate1, Gate2, Gate3);
+                }
             }
 
 
@@ -651,24 +745,40 @@ namespace ConnectionTest.ViewModels
 
             Mouse.OverrideCursor = Cursors.Wait;
 
-            Ping png = new Ping();
-            string res = "Pingに成功したIPアドレスは以下のとおり：\r\n\r\n";
+            //Ping png = new Ping();
+            ResultText += "Pingに成功したIPアドレスは以下のとおり：\r\n\r\n";
 
-            for (int i = 0; i <= 255; i++)
-            {
+            List<int> ip4 = new List<int>();
+
+            Parallel.For(0, 255, i => {
+
                 if (i != Ip3)
                 {
+                    if (i == 90)
+                    {
+                        int a = 0;
+                    }
+
+
+                    Ping png = new Ping();
                     string ip = string.Format("{0}.{1}.{2}.{3}", Ip0, Ip1, Ip2, i);
                     var rep = png.Send(ip, Timeout_ms);
 
+                    
+
                     if (rep.Status == IPStatus.Success)
                     {
-                        res += ip + "\r\n";
+                        ip4.Add(i);
                     }
                 }
-            }
 
-            ResultText = res;
+            });
+
+            foreach (int i in ip4)
+            {
+                string ip = string.Format("{0}.{1}.{2}.{3}", Ip0, Ip1, Ip2, i);
+                ResultText += ip + "\r\n";
+            }
 
             Mouse.OverrideCursor = null;
         }

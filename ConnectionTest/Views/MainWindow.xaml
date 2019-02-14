@@ -6,7 +6,7 @@
         xmlns:l="http://schemas.livet-mvvm.net/2011/wpf"
         xmlns:v="clr-namespace:ConnectionTest.Views"
         xmlns:vm="clr-namespace:ConnectionTest.ViewModels"
-        Title="{Binding Path=MyVersion}" Height="500" Width="600">
+        Title="{Binding Path=MyVersion}" Height="600" Width="600">
     
     <Window.DataContext>
         <vm:MainWindowViewModel/>
@@ -61,6 +61,16 @@
                 <TextBox Text="{Binding Path=Msk2}" Width="40"/>
                 <Label Content="."/>
                 <TextBox Text="{Binding Path=Msk3}" Width="40"/>
+            </StackPanel>
+            <Label Content="自分のゲートウェイ"/>
+            <StackPanel Orientation="Horizontal">
+                <TextBox Text="{Binding Path=Gate0}" Width="40"/>
+                <Label Content="."/>
+                <TextBox Text="{Binding Path=Gate1}" Width="40"/>
+                <Label Content="."/>
+                <TextBox Text="{Binding Path=Gate2}" Width="40"/>
+                <Label Content="."/>
+                <TextBox Text="{Binding Path=Gate3}" Width="40"/>
             </StackPanel>
             <CheckBox Content="DHCPをONに設定" IsChecked="{Binding Path=EnDhcp}"/>
             <StackPanel Orientation="Horizontal">

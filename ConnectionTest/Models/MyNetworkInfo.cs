@@ -19,7 +19,8 @@ namespace ConnectionTest.Models
 
         public List<string> Interface = new List<string>();
         public List<string> IP = new List<string>();
-        public List<string> Mask = new List<string>();
+        public List<string> SubnetMask = new List<string>();
+        public List<string> Gateway = new List<string>();
  
         private NetworkInterface[] nis = null;
 
@@ -32,12 +33,14 @@ namespace ConnectionTest.Models
         {
             Interface.Clear();
             IP.Clear();
-            Mask.Clear();
+            SubnetMask.Clear();
+            Gateway.Clear();
 
             // 一度newしないと、GUIに反映されない
             Interface = new List<string>();
             IP = new List<string>();
-            Mask = new List<string>();
+            SubnetMask = new List<string>();
+            Gateway = new List<string>();
         }
 
         public void RefreshNetworkInterface()
@@ -59,7 +62,12 @@ namespace ConnectionTest.Models
                         {
                             Interface.Add(ni.Name);
                             IP.Add(ip.Address.ToString());
-                            Mask.Add(ip.IPv4Mask.ToString());
+                            SubnetMask.Add(ip.IPv4Mask.ToString());
+
+                            if (Gateway.Count == 0)
+                            {
+                                Gateway.Add(null);
+                            }
                         }
                     }
 
@@ -67,7 +75,7 @@ namespace ConnectionTest.Models
                     {
                         Interface.Add(ni.Name);
                         IP.Add(null);
-                        Mask.Add(null);
+                        SubnetMask.Add(null);
                     }
                 }
             }
