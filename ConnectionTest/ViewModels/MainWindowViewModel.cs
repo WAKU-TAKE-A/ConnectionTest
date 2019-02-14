@@ -754,17 +754,9 @@ namespace ConnectionTest.ViewModels
 
                 if (i != Ip3)
                 {
-                    if (i == 90)
-                    {
-                        int a = 0;
-                    }
-
-
                     Ping png = new Ping();
                     string ip = string.Format("{0}.{1}.{2}.{3}", Ip0, Ip1, Ip2, i);
                     var rep = png.Send(ip, Timeout_ms);
-
-                    
 
                     if (rep.Status == IPStatus.Success)
                     {
