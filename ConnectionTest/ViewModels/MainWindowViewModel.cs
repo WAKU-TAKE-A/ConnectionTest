@@ -746,7 +746,7 @@ namespace ConnectionTest.ViewModels
             Mouse.OverrideCursor = Cursors.Wait;
 
             //Ping png = new Ping();
-            ResultText += "Pingに成功したIPアドレスは以下のとおり：\r\n\r\n";
+            ResultText = "Pingに成功したIPアドレスは以下のとおり：\r\n\r\n";
 
             List<int> ip4 = new List<int>();
 
