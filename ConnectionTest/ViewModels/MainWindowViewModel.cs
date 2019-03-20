@@ -732,8 +732,10 @@ namespace ConnectionTest.ViewModels
 
         public void PingAll()
         {
+            string dialog_msg = string.Format("処理に数分かかる可能性があります。処理を行いますか？\r\n（{0}.{1}.{2}.1 ～ {0}.{1}.{2}.255までpingします）", Ip0, Ip1, Ip2);
+
             var dialog_res = System.Windows.Forms.MessageBox.Show(
-                "処理に数分かかる可能性があります。処理を行いますか？\r\n（第4オクテットの1から255までpingします）", 
+                dialog_msg, 
                 "質問",
                 System.Windows.Forms.MessageBoxButtons.YesNo,
                 System.Windows.Forms.MessageBoxIcon.Question);
@@ -766,10 +768,15 @@ namespace ConnectionTest.ViewModels
 
             });
 
-            foreach (int i in ip4)
+            if (ip4.Count != 0)
             {
-                string ip = string.Format("{0}.{1}.{2}.{3}", Ip0, Ip1, Ip2, i);
-                ResultText += ip + "\r\n";
+                ip4.Sort();
+
+                foreach (int i in ip4)
+                {
+                    string ip = string.Format("{0}.{1}.{2}.{3}", Ip0, Ip1, Ip2, i);
+                    ResultText += ip + "\r\n";
+                }
             }
 
             Mouse.OverrideCursor = null;
