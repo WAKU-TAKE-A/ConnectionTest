@@ -46,7 +46,7 @@ Windows10の場合、以下のようなダイアログが表示され起動し�
 
 ![ConnectionTest001.jpg](https://raw.githubusercontent.com/WAKU-TAKE-A/ConnectionTest/master/img/dialog001.jpg)
 
-その時は、「ConnectionTest.exe」のプロバティの下方の、「許可する」をチェックを入れて下さい。
+その時は、「ConnectionTest.exe」のプロバティの下方の、「許可する」にチェックを入れて下さい。
 
 ![ConnectionTest001.jpg](https://raw.githubusercontent.com/WAKU-TAKE-A/ConnectionTest/master/img/dialog002.jpg)
 
