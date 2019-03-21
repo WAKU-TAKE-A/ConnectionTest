@@ -40,6 +40,16 @@
 
 「接続可能なIPの確認」は、第4オクテットを1～255（自分を除く）の全てにpingを行います。
 
+# 注意点
+
+Windows10の場合、以下のようなダイアログが表示され起動しないかもしれません。
+
+![ConnectionTest001.jpg](https://raw.githubusercontent.com/WAKU-TAKE-A/ConnectionTest/master/img/dialog001.jpg)
+
+その時は、「ConnectionTest.exe」のプロバティの下方の、「許可する」をチェックを入れて下さい。
+
+![ConnectionTest001.jpg](https://raw.githubusercontent.com/WAKU-TAKE-A/ConnectionTest/master/img/dialog002.jpg)
+
 # ライセンス
 
 本アプリケーションは「MIT」ライセンスです。
