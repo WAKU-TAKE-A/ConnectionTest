@@ -40,7 +40,7 @@ Windows10においてIPの重複があった場合、以下のようなダイア
 
 ![ConnectionTest001.jpg](https://raw.githubusercontent.com/WAKU-TAKE-A/ConnectionTest/master/img/dialog003.jpg)
 
-「接続チェック(ping))」はDOSコマンドのping、「ネット状況確認(ipconfig))」はipconfigです。
+「接続チェック(ping)」はDOSコマンドのping、「ネット状況確認(ipconfig)」はipconfigです。
 
 「接続可能なIPの確認」は、第4オクテットの1～255（自分を除く）の全てにpingを行います。こちらはC#のSystem.Net.NetworkInformation.Pingをマルチスレッドで実行しています。
 
