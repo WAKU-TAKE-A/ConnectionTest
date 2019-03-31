@@ -46,7 +46,7 @@ Windows10においてIPの重複があった場合、以下のようなダイア
 
 # 注意点
 
-Windows10の場合、以下のようなダイアログが表示され起動しないかもしれません。
+Windows10の場合、ConnectionTest.zipのConnectionTest.exeを実行する際に、以下のようなダイアログが表示され起動しないかもしれません。
 
 ![ConnectionTest001.jpg](https://raw.githubusercontent.com/WAKU-TAKE-A/ConnectionTest/master/img/dialog001.jpg)
 
