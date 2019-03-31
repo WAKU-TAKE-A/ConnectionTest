@@ -39,7 +39,7 @@
         </Grid.ColumnDefinitions>
 
         <StackPanel Grid.Column="0">
-            <Label Content="{Binding Path=StatusConnection}"/>
+            <Label Content="{Binding Path=StatusConnection}" Background="{Binding Path=ColorStatusConnection}"/>
             <Label Content="ネットワーク アダプタ"/>
             <ComboBox ItemsSource="{Binding Path=Interface}" SelectedIndex="{Binding Path=SlctdInterface}"/>
             <Label Content="自分のIPアドレス"/>

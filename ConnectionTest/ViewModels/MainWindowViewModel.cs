@@ -93,10 +93,12 @@ namespace ConnectionTest.ViewModels
             if (NetworkInterface.GetIsNetworkAvailable())
             {
                 StatusConnection = "ネットに接続しています";
+                ColorStatusConnection = "White";
             }
             else
             {
                 StatusConnection = "ネットに接続していません";
+                ColorStatusConnection = "Red";
             }
         }
 
@@ -531,6 +533,24 @@ namespace ConnectionTest.ViewModels
         }
         #endregion
 
+        #region ColorStatusConnection変更通知プロパティ
+        private string _ColorStatusConnection = "Red";
+
+        public string ColorStatusConnection
+        {
+            get
+            { return _ColorStatusConnection; }
+            set
+            { 
+                if (_ColorStatusConnection == value)
+                    return;
+                _ColorStatusConnection = value;
+                RaisePropertyChanged();
+            }
+        }
+        #endregion
+
+
         // コマンド
 
         #region RefreshIPCommand
@@ -620,7 +640,6 @@ namespace ConnectionTest.ViewModels
                 }
             }
 
-
             bool bret = cmd.Run(str_cmd);
 
             if (bret)
@@ -630,7 +649,7 @@ namespace ConnectionTest.ViewModels
             }
             else
             {
-                ResultText = "失敗しました。";
+                ResultText = cmd.StandardOutput + "\r\n（自分のIPアドレスを他の値に変えて試してみてください）";
             }
             
             Mouse.OverrideCursor = null;
@@ -661,7 +680,6 @@ namespace ConnectionTest.ViewModels
         {
             Mouse.OverrideCursor = Cursors.Wait;
             bool bret = cmd.Run(string.Format("ping {0}.{1}.{2}.{3} -n 1 -w {4}", Ip0dst, Ip1dst, Ip2dst, Ip3dst, Timeout_ms));
-            ResultText = cmd.StandardOutput;
 
             if (bret)
             {
@@ -669,7 +687,7 @@ namespace ConnectionTest.ViewModels
             }
             else
             {
-                ResultText = "失敗しました。";
+                ResultText = cmd.StandardOutput + "\r\n（LANの接続、接続IPアドレスなどを確認してください）";
             }
 
             Mouse.OverrideCursor = null;
@@ -695,7 +713,6 @@ namespace ConnectionTest.ViewModels
         {
             Mouse.OverrideCursor = Cursors.Wait;
             bool bret = cmd.Run("ipconfig");
-            ResultText = cmd.StandardOutput;
 
             if (bret)
             {
@@ -703,7 +720,7 @@ namespace ConnectionTest.ViewModels
             }
             else
             {
-                ResultText = "失敗しました。";
+                ResultText = cmd.StandardOutput + "\r\n（不明なエラー）";
             }
 
             Mouse.OverrideCursor = null;

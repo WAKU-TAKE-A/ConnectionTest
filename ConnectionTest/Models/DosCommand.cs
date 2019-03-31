@@ -38,16 +38,29 @@ namespace ConnectionTest.Models
             p.StartInfo.Arguments = "/c " + command;
 
             //起動
-            bool bret = p.Start();
+            bool bret;
 
-            //出力を読み取る
-            StandardOutput = p.StandardOutput.ReadToEnd();
+            try
+            {
+                bret = p.Start();
 
-            //プロセス終了まで待機する
-            //WaitForExitはReadToEndの後である必要がある
-            //(親プロセス、子プロセスでブロック防止のため)
-            p.WaitForExit();
-            p.Close();
+                //出力を読み取る
+                StandardOutput = p.StandardOutput.ReadToEnd();
+
+                //プロセス終了まで待機する
+                //WaitForExitはReadToEndの後である必要がある
+                //(親プロセス、子プロセスでブロック防止のため)
+                p.WaitForExit();
+            }
+            catch (Exception)
+            {
+                bret = false;
+                StandardOutput = command + "は異常終了しました";
+            }
+            finally
+            {
+                p.Close();
+            }
             
             return bret;
         }
