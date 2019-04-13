@@ -6,7 +6,7 @@
         xmlns:l="http://schemas.livet-mvvm.net/2011/wpf"
         xmlns:v="clr-namespace:ConnectionTest.Views"
         xmlns:vm="clr-namespace:ConnectionTest.ViewModels"
-        Title="{Binding Path=MyVersion}" Height="600" Width="600">
+        Title="{Binding Path=MyVersion}" Height="600" Width="700">
     
     <Window.DataContext>
         <vm:MainWindowViewModel/>
@@ -34,65 +34,67 @@
 
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="200" />
+            <ColumnDefinition Width="250" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
-
-        <StackPanel Grid.Column="0">
-            <Label Content="{Binding Path=StatusConnection}" Background="{Binding Path=ColorStatusConnection}"/>
-            <Label Content="ネットワーク アダプタ"/>
-            <ComboBox ItemsSource="{Binding Path=Interface}" SelectedIndex="{Binding Path=SlctdInterface}"/>
-            <Label Content="自分のIPアドレス"/>
-            <StackPanel Orientation="Horizontal">
-                <TextBox Text="{Binding Path=Ip0}" Width="40"/>
-                <Label Content="."/>
-                <TextBox Text="{Binding Path=Ip1}" Width="40"/>
-                <Label Content="."/>
-                <TextBox Text="{Binding Path=Ip2}" Width="40"/>
-                <Label Content="."/>
-                <TextBox Text="{Binding Path=Ip3}" Width="40"/>
+        
+        <ScrollViewer>
+            <StackPanel Grid.Column="0">
+                <Label Content="{Binding Path=StatusConnection}" Background="{Binding Path=ColorStatusConnection}"/>
+                <Label Content="ネットワーク アダプタ"/>
+                <ComboBox ItemsSource="{Binding Path=Interface}" SelectedIndex="{Binding Path=SlctdInterface}"/>
+                <Label Content="自分のIPアドレス"/>
+                <StackPanel Orientation="Horizontal">
+                    <TextBox Text="{Binding Path=Ip0}" Width="40"/>
+                    <Label Content="."/>
+                    <TextBox Text="{Binding Path=Ip1}" Width="40"/>
+                    <Label Content="."/>
+                    <TextBox Text="{Binding Path=Ip2}" Width="40"/>
+                    <Label Content="."/>
+                    <TextBox Text="{Binding Path=Ip3}" Width="40"/>
+                </StackPanel>
+                <Label Content="自分のサブネットマスク"/>
+                <StackPanel Orientation="Horizontal">
+                    <TextBox Text="{Binding Path=Msk0}" Width="40"/>
+                    <Label Content="."/>
+                    <TextBox Text="{Binding Path=Msk1}" Width="40"/>
+                    <Label Content="."/>
+                    <TextBox Text="{Binding Path=Msk2}" Width="40"/>
+                    <Label Content="."/>
+                    <TextBox Text="{Binding Path=Msk3}" Width="40"/>
+                </StackPanel>
+                <Label Content="自分のゲートウェイ"/>
+                <StackPanel Orientation="Horizontal">
+                    <TextBox Text="{Binding Path=Gate0}" Width="40"/>
+                    <Label Content="."/>
+                    <TextBox Text="{Binding Path=Gate1}" Width="40"/>
+                    <Label Content="."/>
+                    <TextBox Text="{Binding Path=Gate2}" Width="40"/>
+                    <Label Content="."/>
+                    <TextBox Text="{Binding Path=Gate3}" Width="40"/>
+                </StackPanel>
+                <CheckBox Content="DHCPをONに設定" IsChecked="{Binding Path=EnDhcp}"/>
+                <StackPanel Orientation="Horizontal">
+                    <Button Content="IPの再取得" Command="{Binding Path=RefreshIPCommand}" Width="100"/>
+                    <Button Content="上記設定に変更" Command="{Binding Path=SetIPCommand}" Width="100"/>
+                </StackPanel>
+                <Label Content="接続先IPアドレス"/>
+                <StackPanel Orientation="Horizontal">
+                    <TextBox Text="{Binding Path=Ip0dst}" Width="40"/>
+                    <Label Content="."/>
+                    <TextBox Text="{Binding Path=Ip1dst}" Width="40"/>
+                    <Label Content="."/>
+                    <TextBox Text="{Binding Path=Ip2dst}" Width="40"/>
+                    <Label Content="."/>
+                    <TextBox Text="{Binding Path=Ip3dst}" Width="40"/>
+                </StackPanel>
+                <Label Content="pingのタイムアウト(ms)"/>
+                <TextBox Text="{Binding Path=Timeout_ms}"/>
+                <Button Content="接続チェック(ping)" Command="{Binding Path=PingCommand}"/>
+                <Button Content="ネットワーク状況確認(ipconfig)" Command="{Binding Path=IpconfigCommand}"/>
+                <Button Content="接続可能なIPの確認" Command="{Binding Path=PingAllCommand}"/>
             </StackPanel>
-            <Label Content="自分のサブネットマスク"/>
-            <StackPanel Orientation="Horizontal">
-                <TextBox Text="{Binding Path=Msk0}" Width="40"/>
-                <Label Content="."/>
-                <TextBox Text="{Binding Path=Msk1}" Width="40"/>
-                <Label Content="."/>
-                <TextBox Text="{Binding Path=Msk2}" Width="40"/>
-                <Label Content="."/>
-                <TextBox Text="{Binding Path=Msk3}" Width="40"/>
-            </StackPanel>
-            <Label Content="自分のゲートウェイ"/>
-            <StackPanel Orientation="Horizontal">
-                <TextBox Text="{Binding Path=Gate0}" Width="40"/>
-                <Label Content="."/>
-                <TextBox Text="{Binding Path=Gate1}" Width="40"/>
-                <Label Content="."/>
-                <TextBox Text="{Binding Path=Gate2}" Width="40"/>
-                <Label Content="."/>
-                <TextBox Text="{Binding Path=Gate3}" Width="40"/>
-            </StackPanel>
-            <CheckBox Content="DHCPをONに設定" IsChecked="{Binding Path=EnDhcp}"/>
-            <StackPanel Orientation="Horizontal">
-                <Button Content="IPの再取得" Command="{Binding Path=RefreshIPCommand}" Width="100"/>
-                <Button Content="上記設定に変更" Command="{Binding Path=SetIPCommand}" Width="100"/>
-            </StackPanel>
-            <Label Content="接続先IPアドレス"/>
-            <StackPanel Orientation="Horizontal">
-                <TextBox Text="{Binding Path=Ip0dst}" Width="40"/>
-                <Label Content="."/>
-                <TextBox Text="{Binding Path=Ip1dst}" Width="40"/>
-                <Label Content="."/>
-                <TextBox Text="{Binding Path=Ip2dst}" Width="40"/>
-                <Label Content="."/>
-                <TextBox Text="{Binding Path=Ip3dst}" Width="40"/>
-            </StackPanel>
-            <Label Content="タイムアウト(ms)"/>
-            <TextBox Text="{Binding Path=Timeout_ms}"/>
-            <Button Content="接続チェック(ping)" Command="{Binding Path=PingCommand}"/>
-            <Button Content="ネットワーク状況確認(ipconfig)" Command="{Binding Path=IpconfigCommand}"/>
-            <Button Content="接続可能なIPの確認" Command="{Binding Path=PingAllCommand}"/>
-        </StackPanel>
+        </ScrollViewer>
         <TextBox Grid.Column="1" Text="{Binding Path=ResultText}" AcceptsReturn="True" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto" VerticalAlignment="Stretch" FontSize="16"/>
     </Grid>
 </Window>

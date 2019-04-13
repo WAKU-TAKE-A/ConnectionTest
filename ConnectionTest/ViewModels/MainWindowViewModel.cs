@@ -93,7 +93,7 @@ namespace ConnectionTest.ViewModels
             if (NetworkInterface.GetIsNetworkAvailable())
             {
                 StatusConnection = "ネットに接続しています";
-                ColorStatusConnection = "White";
+                ColorStatusConnection = "LimeGreen";
             }
             else
             {
