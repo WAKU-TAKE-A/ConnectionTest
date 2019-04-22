@@ -194,7 +194,7 @@ namespace ConnectionTest.ViewModels
                     Msk3 = int.Parse(msks[3]);
                 }
 
-                if (info.IP.Count == 0 || info.Gateway[SlctdInterface] == null)
+                if (info.IP.Count == 0 || info.Gateway.Count == 0 || info.Gateway[SlctdInterface] == null)
                 {
                     Gate0 = Gate1 = Gate2 = Gate3 = 0;
                 }
@@ -645,7 +645,7 @@ namespace ConnectionTest.ViewModels
             if (bret)
             {
                 ResultText = cmd.StandardOutput;
-                RefreshIP();
+                //RefreshIP();
             }
             else
             {
