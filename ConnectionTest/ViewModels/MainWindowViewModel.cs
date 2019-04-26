@@ -645,7 +645,7 @@ namespace ConnectionTest.ViewModels
             if (bret)
             {
                 ResultText = cmd.StandardOutput;
-                //RefreshIP();
+                RefreshIP();
             }
             else
             {
