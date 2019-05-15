@@ -93,6 +93,9 @@
                 <Button Content="接続チェック(ping)" Command="{Binding Path=PingCommand}"/>
                 <Button Content="ネットワーク状況確認(ipconfig)" Command="{Binding Path=IpconfigCommand}"/>
                 <Button Content="接続可能なIPの確認" Command="{Binding Path=PingAllCommand}"/>
+                <Label Content="ポート番号" Visibility="{Binding Path=ExistPortQry}"/>
+                <TextBox Text="{Binding Path=PortNum}" Visibility="{Binding Path=ExistPortQry}"/>
+                <Button Content="ポート確認(PortQry)" Command="{Binding Path=PortQryCommand}" Visibility="{Binding Path=ExistPortQry}"/>
             </StackPanel>
         </ScrollViewer>
         <TextBox Grid.Column="1" Text="{Binding Path=ResultText}" AcceptsReturn="True" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto" VerticalAlignment="Stretch" FontSize="16"/>

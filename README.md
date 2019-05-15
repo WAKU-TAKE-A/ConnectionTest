@@ -32,27 +32,29 @@
 
 アダプタ名を選択することで、「自分のIPアドレス」を確認することができます。
 
-自分のIPアドレスが変化した時は、「アダプタ名」や「自分のIPアドレス」が自動的に更新されます。「IPの再取得」を押すことで手動で更新することもできます。
+LANケーブルの抜き差しなどで自分のIPアドレスが変化した時は、「アダプタ名」や「自分のIPアドレス」が自動的に更新されます。「IPの再取得」を押すことで手動で更新することもできます。
 
 「自分の～」のテキストボックスを変更し、「上記設定に変更」ボタンを押すことで所望の値に変更することができます。「DHCPをONに設定」にチェックを入れるとDHCPを有効にします。ちなみに、管理者権限で本アプリを起動していないと本機能は使えませんので注意してください。
 
 Windows10においてIPの重複があった場合、以下のようなダイアログが出ることがあります。（システムの環境で異なるようです）
 
-![ConnectionTest001.jpg](https://raw.githubusercontent.com/WAKU-TAKE-A/ConnectionTest/master/img/dialog003.jpg)
+![dialog003.jpg](https://raw.githubusercontent.com/WAKU-TAKE-A/ConnectionTest/master/img/dialog003.jpg)
 
 「接続チェック(ping)」はDOSコマンドのping、「ネット状況確認(ipconfig)」はipconfigです。
 
 「接続可能なIPの確認」は、第4オクテットの1～255（自分を除く）の全てにpingを行います。こちらはC#のSystem.Net.NetworkInformation.Pingをマルチスレッドで実行しています。
 
+[こちら](https://www.microsoft.com/en-us/download/details.aspx?id=17148)からダウンロードできるPortQryV2.exeを実行し、解凍されたフォルダ内に入っているPortQry.exeを、ConnectionTest.exeと同じフォルダにコピーしてください。「ポート確認(PortQry)」を実行することができます。
+
 # 注意点
 
 Windows10の場合、ConnectionTest.zipのConnectionTest.exeを実行する際に、以下のようなダイアログが表示され起動しないかもしれません。
 
-![ConnectionTest001.jpg](https://raw.githubusercontent.com/WAKU-TAKE-A/ConnectionTest/master/img/dialog001.jpg)
+![dialog001.jpg](https://raw.githubusercontent.com/WAKU-TAKE-A/ConnectionTest/master/img/dialog001.jpg)
 
 その時は、「ConnectionTest.exe」のプロバティの下方の、「許可する」にチェックを入れて下さい。
 
-![ConnectionTest001.jpg](https://raw.githubusercontent.com/WAKU-TAKE-A/ConnectionTest/master/img/dialog002.jpg)
+![dialog002.jpg](https://raw.githubusercontent.com/WAKU-TAKE-A/ConnectionTest/master/img/dialog002.jpg)
 
 # ライセンス
 

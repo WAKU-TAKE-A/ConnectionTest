@@ -17,6 +17,7 @@ using ConnectionTest.Models;
 using System.Net.NetworkInformation;
 using System.Windows.Input;
 using System.Threading.Tasks;
+using System.IO;
 
 namespace ConnectionTest.ViewModels
 {
@@ -64,6 +65,9 @@ namespace ConnectionTest.ViewModels
          * 自動的にUIDispatcher上での通知に変換されます。変更通知に際してUIDispatcherを操作する必要はありません。
          */
 
+        private readonly string APPL_DNAME = Path.GetDirectoryName(System.Windows.Forms.Application.ExecutablePath);
+        private const string FNM_PORTQRY = "PortQry.exe";
+
         private MyNetworkInfo info = new MyNetworkInfo();
         private DosCommand cmd = new DosCommand();
 
@@ -76,6 +80,8 @@ namespace ConnectionTest.ViewModels
 
             NetworkChange.NetworkAvailabilityChanged += new NetworkAvailabilityChangedEventHandler(NetworkChange_NetworkAvailabilityChanged);
             NetworkChange.NetworkAddressChanged += new NetworkAddressChangedEventHandler(NetworkChange_NetworkAddressChanged);
+
+            PortQryCommand.RaiseCanExecuteChanged();
         }
 
         private void NetworkChange_NetworkAddressChanged(object sender, EventArgs e)
@@ -100,6 +106,23 @@ namespace ConnectionTest.ViewModels
                 StatusConnection = "ネットに接続していません";
                 ColorStatusConnection = "Red";
             }
+        }
+
+        public bool fileExists(string fname)
+        {
+            bool bRet = true;
+
+            if (string.IsNullOrWhiteSpace(fname))
+            {
+                bRet = false;
+            }
+            else
+            {
+                FileInfo fi = new FileInfo(fname);
+                bRet = fi.Exists;
+            }
+
+            return bRet;
         }
 
         // 変更通知プロパティ
@@ -550,6 +573,39 @@ namespace ConnectionTest.ViewModels
         }
         #endregion
 
+        #region PortNum変更通知プロパティ
+        private int _PortNum = 80;
+
+        public int PortNum
+        {
+            get
+            { return _PortNum; }
+            set
+            { 
+                if (_PortNum == value)
+                    return;
+                _PortNum = value;
+                RaisePropertyChanged();
+            }
+        }
+        #endregion
+
+        #region ExistPortQry変更通知プロパティ
+        private string _ExistPortQry = "Hidden";
+
+        public string ExistPortQry
+        {
+            get
+            { return _ExistPortQry; }
+            set
+            { 
+                if (_ExistPortQry == value)
+                    return;
+                _ExistPortQry = value;
+                RaisePropertyChanged();
+            }
+        }
+        #endregion
 
         // コマンド
 
@@ -578,6 +634,8 @@ namespace ConnectionTest.ViewModels
             info.RefreshNetworkInterface();
             Interface = info.Interface;
             SlctdInterface = 0;
+
+            PortQryCommand.RaiseCanExecuteChanged();
         }
         #endregion
 
@@ -651,7 +709,8 @@ namespace ConnectionTest.ViewModels
             {
                 ResultText = cmd.StandardOutput + "\r\n（自分のIPアドレスを他の値に変えて試してみてください）";
             }
-            
+
+            PortQryCommand.RaiseCanExecuteChanged();
             Mouse.OverrideCursor = null;
         }
         #endregion
@@ -690,6 +749,7 @@ namespace ConnectionTest.ViewModels
                 ResultText = cmd.StandardOutput + "\r\n（LANの接続、接続IPアドレスなどを確認してください）";
             }
 
+            PortQryCommand.RaiseCanExecuteChanged();
             Mouse.OverrideCursor = null;
         }
         #endregion
@@ -723,6 +783,7 @@ namespace ConnectionTest.ViewModels
                 ResultText = cmd.StandardOutput + "\r\n（不明なエラー）";
             }
 
+            PortQryCommand.RaiseCanExecuteChanged();
             Mouse.OverrideCursor = null;
         }
         #endregion
@@ -794,6 +855,67 @@ namespace ConnectionTest.ViewModels
                     string ip = string.Format("{0}.{1}.{2}.{3}", Ip0, Ip1, Ip2, i);
                     ResultText += ip + "\r\n";
                 }
+            }
+
+            PortQryCommand.RaiseCanExecuteChanged();
+            Mouse.OverrideCursor = null;
+        }
+        #endregion
+
+
+        #region PortQryCommand
+        private ViewModelCommand _PortQryCommand;
+
+        public ViewModelCommand PortQryCommand
+        {
+            get
+            {
+                if (_PortQryCommand == null)
+                {
+                    _PortQryCommand = new ViewModelCommand(PortQry, CanPortQry);
+                }
+                return _PortQryCommand;
+            }
+        }
+
+        public bool CanPortQry()
+        {
+            string portqry_path = Path.Combine(APPL_DNAME, FNM_PORTQRY);
+            bool chk = fileExists(portqry_path);
+
+            if (chk)
+            {
+                ExistPortQry = "Visible";
+            }
+            else
+            {
+                ExistPortQry = "Hidden";
+            }
+
+            return chk;
+        }
+
+        public void PortQry()
+        {
+            Mouse.OverrideCursor = Cursors.Wait;
+            string portqry_path = Path.Combine(APPL_DNAME, FNM_PORTQRY);
+
+            if (fileExists(portqry_path))
+            {
+                bool bret = cmd.Run(string.Format(portqry_path + " -n {0}.{1}.{2}.{3} -e {4}", Ip0dst, Ip1dst, Ip2dst, Ip3dst, PortNum.ToString()));
+
+                if (bret)
+                {
+                    ResultText = cmd.StandardOutput;
+                }
+                else
+                {
+                    ResultText = cmd.StandardOutput + "\r\n（不明なエラー）";
+                }
+            }
+            else
+            {
+                ExistPortQry = "Hidden";
             }
 
             Mouse.OverrideCursor = null;
