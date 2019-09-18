@@ -98,12 +98,12 @@ namespace ConnectionTest.ViewModels
         {
             if (NetworkInterface.GetIsNetworkAvailable())
             {
-                StatusConnection = "ネットに接続しています";
+                StatusConnection = Properties.Resources.StrCon;
                 ColorStatusConnection = "LimeGreen";
             }
             else
             {
-                StatusConnection = "ネットに接続していません";
+                StatusConnection = Properties.Resources.StrNotCon;
                 ColorStatusConnection = "Red";
             }
         }
@@ -607,6 +607,8 @@ namespace ConnectionTest.ViewModels
         }
         #endregion
 
+        
+
         // コマンド
 
         #region RefreshIPCommand
@@ -657,8 +659,8 @@ namespace ConnectionTest.ViewModels
         public void SetIP()
         {
             var dialog_res = System.Windows.Forms.MessageBox.Show(
-                "「コントロールパネル」の「ネットワークと共有センター」の設定を書き換えます。よろしいですか？",
-                "質問",
+                Properties.Resources.StrQuestion,
+                "Question",
                 System.Windows.Forms.MessageBoxButtons.YesNo,
                 System.Windows.Forms.MessageBoxIcon.Question);
 
@@ -707,7 +709,7 @@ namespace ConnectionTest.ViewModels
             }
             else
             {
-                ResultText = cmd.StandardOutput + "\r\n（自分のIPアドレスを他の値に変えて試してみてください）";
+                ResultText = cmd.StandardOutput + "\r\n(Try changing your own IP address to another value.)";
             }
 
             PortQryCommand.RaiseCanExecuteChanged();
@@ -746,7 +748,7 @@ namespace ConnectionTest.ViewModels
             }
             else
             {
-                ResultText = cmd.StandardOutput + "\r\n（LANの接続、接続IPアドレスなどを確認してください）";
+                ResultText = cmd.StandardOutput + "\r\n(Check the LAN connection, connection IP address, etc.)";
             }
 
             PortQryCommand.RaiseCanExecuteChanged();
@@ -780,7 +782,7 @@ namespace ConnectionTest.ViewModels
             }
             else
             {
-                ResultText = cmd.StandardOutput + "\r\n（不明なエラー）";
+                ResultText = cmd.StandardOutput + "\r\n(Unknown error)";
             }
 
             PortQryCommand.RaiseCanExecuteChanged();
@@ -810,11 +812,11 @@ namespace ConnectionTest.ViewModels
 
         public void PingAll()
         {
-            string dialog_msg = string.Format("処理に数分かかる可能性があります。処理を行いますか？\r\n（{0}.{1}.{2}.1 ～ {0}.{1}.{2}.255までpingします）", Ip0, Ip1, Ip2);
+            string dialog_msg = string.Format(Properties.Resources.StrQuestionTwo + "\r\n({0}.{1}.{2}.1 ～ {0}.{1}.{2}.255)", Ip0, Ip1, Ip2);
 
             var dialog_res = System.Windows.Forms.MessageBox.Show(
                 dialog_msg, 
-                "質問",
+                "Question",
                 System.Windows.Forms.MessageBoxButtons.YesNo,
                 System.Windows.Forms.MessageBoxIcon.Question);
 
@@ -826,7 +828,7 @@ namespace ConnectionTest.ViewModels
             Mouse.OverrideCursor = Cursors.Wait;
 
             //Ping png = new Ping();
-            ResultText = "Pingに成功したIPアドレスは以下のとおり：\r\n\r\n";
+            ResultText = Properties.Resources.StrResPingAll + " : \r\n\r\n";
 
             List<int> ip4 = new List<int>();
 
@@ -861,7 +863,6 @@ namespace ConnectionTest.ViewModels
             Mouse.OverrideCursor = null;
         }
         #endregion
-
 
         #region PortQryCommand
         private ViewModelCommand _PortQryCommand;
@@ -910,7 +911,7 @@ namespace ConnectionTest.ViewModels
                 }
                 else
                 {
-                    ResultText = cmd.StandardOutput + "\r\n（不明なエラー）";
+                    ResultText = cmd.StandardOutput + "\r\n(Unknown error)";
                 }
             }
             else

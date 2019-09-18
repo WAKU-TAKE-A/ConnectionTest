@@ -2,16 +2,15 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
-        xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
         xmlns:l="http://schemas.livet-mvvm.net/2011/wpf"
-        xmlns:v="clr-namespace:ConnectionTest.Views"
         xmlns:vm="clr-namespace:ConnectionTest.ViewModels"
+        xmlns:prop="clr-namespace:ConnectionTest.Properties"
         Title="{Binding Path=MyVersion}" Height="600" Width="700">
     
     <Window.DataContext>
         <vm:MainWindowViewModel/>
     </Window.DataContext>
-    
+
     <i:Interaction.Triggers>
     
     	<!--Viewに特別な要件が存在しない限りは、トリガーやアクションの自作にこだわらず積極的にコードビハインドを使いましょう -->
@@ -41,9 +40,9 @@
         <ScrollViewer>
             <StackPanel Grid.Column="0">
                 <Label Content="{Binding Path=StatusConnection}" Background="{Binding Path=ColorStatusConnection}"/>
-                <Label Content="ネットワーク アダプタ"/>
+                <Label Content="{x:Static prop:Resources.StrNIC}"/>
                 <ComboBox ItemsSource="{Binding Path=Interface}" SelectedIndex="{Binding Path=SlctdInterface}"/>
-                <Label Content="自分のIPアドレス"/>
+                <Label Content="{x:Static prop:Resources.StrMyIP}"/>
                 <StackPanel Orientation="Horizontal">
                     <TextBox Text="{Binding Path=Ip0}" Width="40"/>
                     <Label Content="."/>
@@ -53,7 +52,7 @@
                     <Label Content="."/>
                     <TextBox Text="{Binding Path=Ip3}" Width="40"/>
                 </StackPanel>
-                <Label Content="自分のサブネットマスク"/>
+                <Label Content="{x:Static prop:Resources.StrMySubnetMask}"/>
                 <StackPanel Orientation="Horizontal">
                     <TextBox Text="{Binding Path=Msk0}" Width="40"/>
                     <Label Content="."/>
@@ -63,7 +62,7 @@
                     <Label Content="."/>
                     <TextBox Text="{Binding Path=Msk3}" Width="40"/>
                 </StackPanel>
-                <Label Content="自分のゲートウェイ"/>
+                <Label Content="{x:Static prop:Resources.StrMyGateway}"/>
                 <StackPanel Orientation="Horizontal">
                     <TextBox Text="{Binding Path=Gate0}" Width="40"/>
                     <Label Content="."/>
@@ -73,12 +72,12 @@
                     <Label Content="."/>
                     <TextBox Text="{Binding Path=Gate3}" Width="40"/>
                 </StackPanel>
-                <CheckBox Content="DHCPをONに設定" IsChecked="{Binding Path=EnDhcp}"/>
+                <CheckBox Content="{x:Static prop:Resources.StrDHCP}" IsChecked="{Binding Path=EnDhcp}"/>
                 <StackPanel Orientation="Horizontal">
-                    <Button Content="IPの再取得" Command="{Binding Path=RefreshIPCommand}" Width="100"/>
-                    <Button Content="上記設定に変更" Command="{Binding Path=SetIPCommand}" Width="100"/>
+                    <Button Content="{x:Static prop:Resources.StrReIP}" Command="{Binding Path=RefreshIPCommand}" Width="100"/>
+                    <Button Content="{x:Static prop:Resources.StrSetToAbove}" Command="{Binding Path=SetIPCommand}" Width="100"/>
                 </StackPanel>
-                <Label Content="接続先IPアドレス"/>
+                <Label Content="{x:Static prop:Resources.StrDestIP}"/>
                 <StackPanel Orientation="Horizontal">
                     <TextBox Text="{Binding Path=Ip0dst}" Width="40"/>
                     <Label Content="."/>
@@ -88,14 +87,14 @@
                     <Label Content="."/>
                     <TextBox Text="{Binding Path=Ip3dst}" Width="40"/>
                 </StackPanel>
-                <Label Content="pingのタイムアウト(ms)"/>
+                <Label Content="{x:Static prop:Resources.StrPingTimeout}"/>
                 <TextBox Text="{Binding Path=Timeout_ms}"/>
-                <Button Content="接続チェック(ping)" Command="{Binding Path=PingCommand}"/>
-                <Button Content="ネットワーク状況確認(ipconfig)" Command="{Binding Path=IpconfigCommand}"/>
-                <Button Content="接続可能なIPの確認" Command="{Binding Path=PingAllCommand}"/>
-                <Label Content="ポート番号" Visibility="{Binding Path=ExistPortQry}"/>
+                <Button Content="{x:Static prop:Resources.StrPing}" Command="{Binding Path=PingCommand}"/>
+                <Button Content="{x:Static prop:Resources.StrIpconfig}" Command="{Binding Path=IpconfigCommand}"/>
+                <Button Content="{x:Static prop:Resources.StrCheckIPs}" Command="{Binding Path=PingAllCommand}"/>
+                <Label Content="{x:Static prop:Resources.StrPort}" Visibility="{Binding Path=ExistPortQry}"/>
                 <TextBox Text="{Binding Path=PortNum}" Visibility="{Binding Path=ExistPortQry}"/>
-                <Button Content="ポート確認(PortQry)" Command="{Binding Path=PortQryCommand}" Visibility="{Binding Path=ExistPortQry}"/>
+                <Button Content="{x:Static prop:Resources.StrPortQry}" Command="{Binding Path=PortQryCommand}" Visibility="{Binding Path=ExistPortQry}"/>
             </StackPanel>
         </ScrollViewer>
         <TextBox Grid.Column="1" Text="{Binding Path=ResultText}" AcceptsReturn="True" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto" VerticalAlignment="Stretch" FontSize="16"/>
