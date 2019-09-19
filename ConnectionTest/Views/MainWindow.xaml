@@ -75,7 +75,7 @@
                 <CheckBox Content="{x:Static prop:Resources.StrDHCP}" IsChecked="{Binding Path=EnDhcp}"/>
                 <StackPanel Orientation="Horizontal">
                     <Button Content="{x:Static prop:Resources.StrReIP}" Command="{Binding Path=RefreshIPCommand}" Width="100"/>
-                    <Button Content="{x:Static prop:Resources.StrSetToAbove}" Command="{Binding Path=SetIPCommand}" Width="100"/>
+                    <Button Content="{x:Static prop:Resources.StrSetToAbove}" Command="{Binding Path=SetIPCommand}" Width="130"/>
                 </StackPanel>
                 <Label Content="{x:Static prop:Resources.StrDestIP}"/>
                 <StackPanel Orientation="Horizontal">
