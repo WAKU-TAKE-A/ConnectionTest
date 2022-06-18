@@ -11,6 +11,10 @@
         <vm:MainWindowViewModel/>
     </Window.DataContext>
 
+    <Window.InputBindings>
+        <KeyBinding Gesture="Ctrl+I" Command="{Binding Path=ChangeInitIPCommand}"/>
+    </Window.InputBindings>
+
     <i:Interaction.Triggers>
     
     	<!--Viewに特別な要件が存在しない限りは、トリガーやアクションの自作にこだわらず積極的にコードビハインドを使いましょう -->

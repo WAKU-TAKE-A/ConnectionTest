@@ -18,6 +18,7 @@ using System.Net.NetworkInformation;
 using System.Windows.Input;
 using System.Threading.Tasks;
 using System.IO;
+using System.Xml.Serialization;
 
 namespace ConnectionTest.ViewModels
 {
@@ -71,6 +72,8 @@ namespace ConnectionTest.ViewModels
         private MyNetworkInfo info = new MyNetworkInfo();
         private DosCommand cmd = new DosCommand();
 
+        private InitIp init_ip = new InitIp();
+
         public void Initialize()
         {
             var asm = System.Reflection.Assembly.GetExecutingAssembly();
@@ -108,7 +111,7 @@ namespace ConnectionTest.ViewModels
             }
         }
 
-        public bool fileExists(string fname)
+        private bool fileExists(string fname)
         {
             bool bRet = true;
 
@@ -123,6 +126,44 @@ namespace ConnectionTest.ViewModels
             }
 
             return bRet;
+        }
+
+        private InitIp ReadFile()
+        {
+            string fname = Path.Combine(App.ApplicationFolder, "InitIp.xml");
+
+            //XmlSerializerオブジェクトを作成
+            //オブジェクトの型を指定する
+            XmlSerializer serializer = new XmlSerializer(typeof(InitIp));
+
+            if (File.Exists(fname))
+            {
+                //読み込むファイルを開く
+                StreamReader sr = new StreamReader(fname, new UTF8Encoding(false));
+
+                //XMLファイルから読み込み、逆シリアル化する
+                InitIp ret = (InitIp)serializer.Deserialize(sr);
+
+                //ファイルを閉じる
+                sr.Close();
+
+                return ret;
+            }
+            else
+            {
+                InitIp new_inst = new InitIp();
+                
+                //書き込むファイルを開く（UTF-8 BOM無し）
+                StreamWriter sw = new StreamWriter(fname, false, new UTF8Encoding(false));
+
+                //シリアル化し、XMLファイルに保存する
+                serializer.Serialize(sw, new_inst);
+
+                //ファイルを閉じる
+                sw.Close();
+
+                return new_inst;
+            }
         }
 
         // 変更通知プロパティ
@@ -606,9 +647,7 @@ namespace ConnectionTest.ViewModels
             }
         }
         #endregion
-
         
-
         // コマンド
 
         #region RefreshIPCommand
@@ -919,6 +958,49 @@ namespace ConnectionTest.ViewModels
                 ExistPortQry = "Hidden";
             }
 
+            Mouse.OverrideCursor = null;
+        }
+        #endregion
+
+        #region IpconfigCommand
+        private ViewModelCommand _ChangeInitIPCommand;
+
+        public ViewModelCommand ChangeInitIPCommand
+        {
+            get
+            {
+                if (_ChangeInitIPCommand == null)
+                {
+                    _ChangeInitIPCommand = new ViewModelCommand(ChangeInitIP);
+                }
+                return _ChangeInitIPCommand;
+            }
+        }
+
+        public void ChangeInitIP()
+        {
+            Mouse.OverrideCursor = Cursors.Wait;
+
+            init_ip = ReadFile().Clone();
+
+            Ip0 = init_ip.Ip0;
+            Ip1 = init_ip.Ip1;
+            Ip2 = init_ip.Ip2;
+            Ip3 = init_ip.Ip3;
+            Msk0 = init_ip.Msk0;
+            Msk1 = init_ip.Msk1;
+            Msk2 = init_ip.Msk2;
+            Msk3 = init_ip.Msk3;
+            Gate0 = init_ip.Gate0;
+            Gate1 = init_ip.Gate1;
+            Gate2 = init_ip.Gate2;
+            Gate3 = init_ip.Gate3;
+            Ip0dst = init_ip.Ip0dst;
+            Ip1dst = init_ip.Ip1dst;
+            Ip2dst = init_ip.Ip2dst;
+            Ip3dst = init_ip.Ip3dst;
+
+            PortQryCommand.RaiseCanExecuteChanged();
             Mouse.OverrideCursor = null;
         }
         #endregion

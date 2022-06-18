@@ -20,6 +20,8 @@ namespace ConnectionTest
             //AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(CurrentDomain_UnhandledException);
         }
 
+        public static readonly string ApplicationFolder = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
+
         //集約エラーハンドラ
         //private void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
         //{

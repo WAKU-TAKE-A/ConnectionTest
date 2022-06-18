@@ -13,6 +13,7 @@
 * [「Pingを送信する」](https://dobon.net/vb/dotnet/internet/ping.html)
 * [「DOSコマンドを実行し出力データを取得する」](https://dobon.net/vb/dotnet/process/standardoutput.html)
 * [「AssemblyName.Versionから取得する」](https://dobon.net/vb/dotnet/file/myversioninfo.html#section4)
+* [オブジェクトの内容をXMLファイルに保存、復元する](https://dobon.net/vb/dotnet/file/xmlserializer.html)
 
 「＠IT」の
 
@@ -46,6 +47,8 @@ Windows10においてIPの重複があった場合、以下のようなダイア
 
 [こちら](https://www.microsoft.com/en-us/download/details.aspx?id=17148)からダウンロードできるPortQryV2.exeを実行し、解凍されたフォルダ内に入っているPortQry.exeを、ConnectionTest.exeと同じフォルダにコピーしてください。「ポート確認(PortQry)」を実行することができます。
 
+キーボードショートカット[Ctrl] + [I]で、IPアドレスなどを初期値に設定することができます。実行ファイルと同じフォルダにある「InitIp.xml」に記述された内容で初期化します。xmlファイルが無い場合、[Ctrl] + [I]が実行された際に新規作成作成されます。
+
 # 注意点
 
 Windows10の場合、ConnectionTest.zipのConnectionTest.exeを実行する際に、以下のようなダイアログが表示され起動しないかもしれません。
@@ -60,7 +63,7 @@ Windows10の場合、ConnectionTest.zipのConnectionTest.exeを実行する際�
 
 本アプリケーションは「[MITライセンス](https://ja.wikipedia.org/wiki/MIT_License)」です。
 
-本アプリケーションでは、Livetを利用しています。Livetは、尾上雅則 氏が作成したMVVMのインフラストラクチャーです。非常に使い易いインフラストラクチャーで、MVVMを勉強し始めたころから使わせていただいています。
+本アプリケーションでは、Livetを利用しています。Livetは、尾上雅則 氏が作成したMVVMのインフラストラクチャーです。（現在のメンテナーはかずき氏です）非常に使い易いインフラストラクチャーで、MVVMを勉強し始めたころから使わせていただいています。
 
 Livetは「[zlib/libpngライセンス](https://ja.wikipedia.org/wiki/Zlib_License)」です。
 
