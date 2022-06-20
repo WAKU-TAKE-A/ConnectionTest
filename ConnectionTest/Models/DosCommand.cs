@@ -20,28 +20,28 @@ namespace ConnectionTest.Models
 
         public bool Run(string command = "")
         {
+            // 結果をfalseにセット
+            bool bret = false;
+
             // Processオブジェクトを作成
             Process p = new Process();
 
-            // ComSpec(cmd.exe)のパスを取得して、FileNameプロパティに指定
-            p.StartInfo.FileName = System.Environment.GetEnvironmentVariable("ComSpec");
-
-            // 出力を読み取れるようにする
-            p.StartInfo.UseShellExecute = false;
-            p.StartInfo.RedirectStandardOutput = true;
-            p.StartInfo.RedirectStandardInput = false;
-            
-            //ウィンドウを表示しないようにする
-            p.StartInfo.CreateNoWindow = true;
-            
-            //コマンドラインを指定（"/c"は実行後閉じるために必要）
-            p.StartInfo.Arguments = "/c " + command;
-
-            //起動
-            bool bret;
-
             try
             {
+                // ComSpec(cmd.exe)のパスを取得して、FileNameプロパティに指定
+                p.StartInfo.FileName = System.Environment.GetEnvironmentVariable("ComSpec");
+
+                // 出力を読み取れるようにする
+                p.StartInfo.UseShellExecute = false;
+                p.StartInfo.RedirectStandardOutput = true;
+                p.StartInfo.RedirectStandardInput = false;
+
+                //ウィンドウを表示しないようにする
+                p.StartInfo.CreateNoWindow = true;
+
+                //コマンドラインを指定（"/c"は実行後閉じるために必要）
+                p.StartInfo.Arguments = "/c " + command;
+
                 bret = p.Start();
 
                 //出力を読み取る
@@ -57,11 +57,8 @@ namespace ConnectionTest.Models
                 bret = false;
                 StandardOutput = command + "は異常終了しました";
             }
-            finally
-            {
-                p.Close();
-            }
-            
+
+            p.Close();
             return bret;
         }
     }

@@ -19,6 +19,7 @@ using System.Windows.Input;
 using System.Threading.Tasks;
 using System.IO;
 using System.Xml.Serialization;
+using System.Reflection;
 
 namespace ConnectionTest.ViewModels
 {
@@ -77,7 +78,15 @@ namespace ConnectionTest.ViewModels
         public void Initialize()
         {
             var asm = System.Reflection.Assembly.GetExecutingAssembly();
-            MyVersion = "ConnectionTest " + asm.GetName().Version.ToString();
+
+            if (System.Environment.Is64BitProcess)
+            {
+                MyVersion = "ConnectionTest " + asm.GetName().Version.ToString() + "_x64";
+            }
+            else
+            {
+                MyVersion = "ConnectionTest " + asm.GetName().Version.ToString() + "_x86";
+            }
 
             checkStatusConnection();
 
@@ -128,42 +137,47 @@ namespace ConnectionTest.ViewModels
             return bRet;
         }
 
-        private InitIp ReadFile()
+        private InitIp ReadXml()
         {
-            string fname = Path.Combine(App.ApplicationFolder, "InitIp.xml");
+            InitIp ret = new InitIp();
 
-            //XmlSerializerオブジェクトを作成
-            //オブジェクトの型を指定する
-            XmlSerializer serializer = new XmlSerializer(typeof(InitIp));
-
-            if (File.Exists(fname))
+            try
             {
-                //読み込むファイルを開く
-                StreamReader sr = new StreamReader(fname, new UTF8Encoding(false));
+                string fname = Path.Combine(App.ApplicationFolder, "InitIp.xml");
 
-                //XMLファイルから読み込み、逆シリアル化する
-                InitIp ret = (InitIp)serializer.Deserialize(sr);
+                //XmlSerializerオブジェクトを作成
+                //オブジェクトの型を指定する
+                XmlSerializer serializer = new XmlSerializer(typeof(InitIp));
 
-                //ファイルを閉じる
-                sr.Close();
+                if (File.Exists(fname))
+                {
+                    //読み込むファイルを開く
+                    StreamReader sr = new StreamReader(fname, new UTF8Encoding(false));
 
-                return ret;
+                    //XMLファイルから読み込み、逆シリアル化する
+                    ret = (InitIp)serializer.Deserialize(sr);
+
+                    //ファイルを閉じる
+                    sr.Close();
+                }
+                else
+                {
+                    //書き込むファイルを開く（UTF-8 BOM無し）
+                    StreamWriter sw = new StreamWriter(fname, false, new UTF8Encoding(false));
+
+                    //シリアル化し、XMLファイルに保存する
+                    serializer.Serialize(sw, ret);
+
+                    //ファイルを閉じる
+                    sw.Close();
+                }
             }
-            else
+            catch (Exception ex)
             {
-                InitIp new_inst = new InitIp();
-                
-                //書き込むファイルを開く（UTF-8 BOM無し）
-                StreamWriter sw = new StreamWriter(fname, false, new UTF8Encoding(false));
-
-                //シリアル化し、XMLファイルに保存する
-                serializer.Serialize(sw, new_inst);
-
-                //ファイルを閉じる
-                sw.Close();
-
-                return new_inst;
+                ResultText = MethodBase.GetCurrentMethod().Name + " : \r\n" + ex.Message;
             }
+
+            return ret;
         }
 
         // 変更通知プロパティ
@@ -739,16 +753,26 @@ namespace ConnectionTest.ViewModels
                 }
             }
 
-            bool bret = cmd.Run(str_cmd);
-
-            if (bret)
+            try
             {
-                ResultText = cmd.StandardOutput;
+                bool bret = cmd.Run(str_cmd);
+
+                if (bret)
+                {
+                    ResultText += cmd.StandardOutput;
+                }
+                else
+                {
+                    ResultText = "Error occurred : \r\n";
+                    ResultText += cmd.StandardOutput;
+                }
+                
                 RefreshIP();
             }
-            else
+            catch (Exception ex)
             {
-                ResultText = cmd.StandardOutput + "\r\n(Try changing your own IP address to another value.)";
+                ResultText = "Error occurred : \r\n";
+                ResultText += ex.Message;
             }
 
             PortQryCommand.RaiseCanExecuteChanged();
@@ -981,7 +1005,7 @@ namespace ConnectionTest.ViewModels
         {
             Mouse.OverrideCursor = Cursors.Wait;
 
-            init_ip = ReadFile().Clone();
+            init_ip = ReadXml().Clone();
 
             Ip0 = init_ip.Ip0;
             Ip1 = init_ip.Ip1;
