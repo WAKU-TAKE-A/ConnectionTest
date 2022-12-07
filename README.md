@@ -23,7 +23,7 @@
 
 # バイナリー
 
-[Release](https://github.com/WAKU-TAKE-A/ConnectionTest/releases) にx86版の実行ファイル（ConnectionTest.zip）をおいておきます。
+[Release](https://github.com/WAKU-TAKE-A/ConnectionTest/releases) に実行ファイル（zipファイル）をおいておきます。
 
 # 使い方の概要
 
