@@ -1,70 +1,48 @@
 # ConnectionTest
 
-自分のIPアドレスを取得・設定します。また「ping」、「ipconfig」、「netsh interface ip set address」などのDOSコマンドをGUIから利用します。
+ネットワークアダプタ情報の確認、IPアドレス設定の変更、およびネットワーク診断を一括で行うための WPF アプリケーションです。
+.NET 8 環境への移行に伴い、MVVM パターンを採用して高い保守性と安定性を実現しました。
 
-接続チェック／IPアドレス設定を、DOSプロンプトやコントロールパネルを開かずに実行するために作りました。
+## 概要
+本ツールは、保守現場やネットワーク構築作業において、自身のネットワーク設定変更と周囲の機器への疎通確認を効率化することを目的に開発されています。
 
-本アプリケーションは、Visual Studio 2015で作成しています。MVVMのインフラストラクチャー「Livet」を使っています。
+## 主な機能
 
-「DOBON.NET」の
+### 1. ネットワーク情報の取得
+- 起動時に有効なネットワークアダプタを自動検出し、現在の設定（IP/Mask/GW）を表示します。
+- 有線（Ethernet）および無線（Wi-Fi）アダプタを優先的に検出し、仮想アダプタはフィルタリングされます。
 
-* [「ネットワーク接続の状況が変更されたことを知る」](https://dobon.net/vb/dotnet/internet/detectinternetconnect.html#changed)
-* [「ネットワークインターフェイスのIPアドレスが変更されたことを知る」](https://dobon.net/vb/dotnet/internet/networkaddresschanged.html)
-* [「Pingを送信する」](https://dobon.net/vb/dotnet/internet/ping.html)
-* [「DOSコマンドを実行し出力データを取得する」](https://dobon.net/vb/dotnet/process/standardoutput.html)
-* [「AssemblyName.Versionから取得する」](https://dobon.net/vb/dotnet/file/myversioninfo.html#section4)
-* [オブジェクトの内容をXMLファイルに保存、復元する](https://dobon.net/vb/dotnet/file/xmlserializer.html)
+### 2. IPアドレス設定の変更
+- GUI上で編集した値を、`netsh` コマンドを介してネットワークアダプタへ即座に反映します。
+- 固定IP設定および DHCP への切り替えをサポートしています。
 
-「＠IT」の
+### 3. 設定の保存と読み込み（init_ip.xml）
+- **自動読み込み**: 起動時に実行フォルダ内の `init_ip.xml` を読み込み、初期値を反映します。
+- **自動作成**: 設定ファイルが存在しない場合、現在の画面上の値を元にデフォルトの `init_ip.xml` を自動生成します。
+- **リロード機能**: 設定ファイルの内容を再読み込みし、画面に反映させることができます。
 
-* [「WindowsのnetshコマンドでTCP/IPのパラメータを設定する」](http://www.atmarkit.co.jp/ait/articles/1002/05/news097.html)
+### 4. 一斉Ping（一斉疎通確認）
+同一セグメント内（1〜254）の全ホストに対して並列で Ping を実行し、応答のあったデバイスを表示します。
+また、応答に含まれる TTL（Time To Live）値からデバイスの種別を推定します。
 
-などを参考にしました。
+- **操作保護**: 一斉Pingの実行中は安全のため、操作パネル全体がロック（グレーアウト）され、重複操作を防止します。
 
-# バイナリー
+#### デバイス推定の仕様
+| TTL値 | 推定種別 | 該当する主なデバイス |
+| :--- | :--- | :--- |
+| 64以下 | Linux / Cam | ネットワークカメラ、Linuxサーバー、IoT機器など |
+| 65〜128 | Windows | Windows PC, Windows Server など |
+| 129以上 | NetDevice | ルーター、L3スイッチなどのネットワークインフラ機器 |
 
-[Release](https://github.com/WAKU-TAKE-A/ConnectionTest/releases) にx86版の実行ファイル（ConnectionTest.zip）をおいておきます。
+### 5. 外部ツール連携
+- **Ping/ipconfig**: 標準的な DOS コマンドをアプリ内から実行し、結果を表示します。
+- **PortQry 連携**: `PortQry.exe` が同じフォルダにある場合、指定したポートの疎通確認が可能です。
 
-# 使い方の概要
+### 6. ショートカット
+- **Ctrl + I**: 設定ファイル（`init_ip.xml`）から値を再読み込み（リロード）します。
 
-![ConnectionTest001.jpg](https://raw.githubusercontent.com/WAKU-TAKE-A/ConnectionTest/master/img/ConnectionTest001.jpg)
+## 技術仕様
+- **プラットフォーム**: .NET 8 (Windows)
+- **UI フレームワーク**: WPF / CommunityToolkit.Mvvm
+- **実行権限**: IPアドレスの変更操作には管理者権限が必要です。
 
-ネットワークに接続されていれば、「ネットワークアダプタ」にアダプタ名が表示されます。
-
-アダプタ名を選択することで、「自分のIPアドレス」を確認することができます。
-
-LANケーブルの抜き差しなどで自分のIPアドレスが変化した時は、「アダプタ名」や「自分のIPアドレス」が自動的に更新されます。「IPの再取得」を押すことで手動で更新することもできます。
-
-「自分の～」のテキストボックスを変更し、「上記設定に変更」ボタンを押すことで所望の値に変更することができます。「DHCPをONに設定」にチェックを入れるとDHCPを有効にします。ちなみに、管理者権限で本アプリを起動していないと本機能は使えませんので注意してください。
-
-Windows10においてIPの重複があった場合、以下のようなダイアログが出ることがあります。（システムの環境で異なるようです）
-
-![dialog003.jpg](https://raw.githubusercontent.com/WAKU-TAKE-A/ConnectionTest/master/img/dialog003.jpg)
-
-「接続チェック(ping)」はDOSコマンドのping、「ネット状況確認(ipconfig)」はipconfigです。
-
-「接続可能なIPの確認」は、第4オクテットの1～255（自分を除く）の全てにpingを行います。こちらはC#のSystem.Net.NetworkInformation.Pingをマルチスレッドで実行しています。
-
-[こちら](https://www.microsoft.com/en-us/download/details.aspx?id=17148)からダウンロードできるPortQryV2.exeを実行し、解凍されたフォルダ内に入っているPortQry.exeを、ConnectionTest.exeと同じフォルダにコピーしてください。「ポート確認(PortQry)」を実行することができます。
-
-キーボードショートカット[Ctrl] + [I]で、IPアドレスなどを初期値に設定することができます。実行ファイルと同じフォルダにある「InitIp.xml」に記述された内容で初期化します。xmlファイルが無い場合、[Ctrl] + [I]が実行された際に新規作成作成されます。
-
-# 注意点
-
-Windows10の場合、ConnectionTest.zipのConnectionTest.exeを実行する際に、以下のようなダイアログが表示され起動しないかもしれません。
-
-![dialog001.jpg](https://raw.githubusercontent.com/WAKU-TAKE-A/ConnectionTest/master/img/dialog001.jpg)
-
-その時は、「ConnectionTest.exe」のプロバティの下方の、「許可する」にチェックを入れて下さい。
-
-![dialog002.jpg](https://raw.githubusercontent.com/WAKU-TAKE-A/ConnectionTest/master/img/dialog002.jpg)
-
-# ライセンス
-
-本アプリケーションは「[MITライセンス](https://ja.wikipedia.org/wiki/MIT_License)」です。
-
-本アプリケーションでは、Livetを利用しています。Livetは、尾上雅則 氏が作成したMVVMのインフラストラクチャーです。（現在のメンテナーはかずき氏です）非常に使い易いインフラストラクチャーで、MVVMを勉強し始めたころから使わせていただいています。
-
-Livetは「[zlib/libpngライセンス](https://ja.wikipedia.org/wiki/Zlib_License)」です。
-
-ともに、オープンソースソフトウェアです。

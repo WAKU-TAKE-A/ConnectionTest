@@ -3,3 +3,5 @@
 /bin
 /.vs
 /ConnectionTest/obj
+/ConnectionTest/bin
+/save_ai_outputs.py

@@ -1,106 +1,80 @@
-﻿<Window x:Class="ConnectionTest.Views.MainWindow"
+<Window x:Class="ConnectionTest.Views.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
-        xmlns:l="http://schemas.livet-mvvm.net/2011/wpf"
+        xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
         xmlns:vm="clr-namespace:ConnectionTest.ViewModels"
         xmlns:prop="clr-namespace:ConnectionTest.Properties"
-        Title="{Binding Path=MyVersion}" Height="600" Width="700">
-    
-    <Window.DataContext>
-        <vm:MainWindowViewModel/>
-    </Window.DataContext>
-
-    <Window.InputBindings>
-        <KeyBinding Gesture="Ctrl+I" Command="{Binding Path=ChangeInitIPCommand}"/>
-    </Window.InputBindings>
-
+        Title="{Binding MyVersion}" Height="600" Width="720">
+    <Window.DataContext><vm:MainWindowViewModel/></Window.DataContext>
+    <Window.InputBindings><KeyBinding Gesture="Ctrl+I" Command="{Binding ChangeInitIPCommand}"/></Window.InputBindings>
     <i:Interaction.Triggers>
-    
-    	<!--Viewに特別な要件が存在しない限りは、トリガーやアクションの自作にこだわらず積極的にコードビハインドを使いましょう -->
-    	<!--Viewのコードビハインドは、基本的にView内で完結するロジックとViewModelからのイベントの受信(専用リスナを使用する)に限るとトラブルが少なくなります -->
-    	<!--Livet1.1からはコードビハインドでViewModelのイベントを受信するためのWeakEventLisnterサポートが追加されています --> 
-        
-        <!--WindowのContentRenderedイベントのタイミングでViewModelのInitializeメソッドが呼ばれます-->
         <i:EventTrigger EventName="ContentRendered">
-            <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="Initialize"/>
+            <i:CallMethodAction TargetObject="{Binding}" MethodName="Initialize"/>
         </i:EventTrigger>
-
-        <!--Windowが閉じたタイミングでViewModelのDisposeメソッドが呼ばれます-->
-        <i:EventTrigger EventName="Closed">
-            <l:DataContextDisposeAction/>
-        </i:EventTrigger>
-
-        <!--WindowのCloseキャンセル処理に対応する場合は、WindowCloseCancelBehaviorの使用を検討してください-->
-
     </i:Interaction.Triggers>
-
     <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="250" />
-            <ColumnDefinition Width="*" />
-        </Grid.ColumnDefinitions>
-        
+        <Grid.ColumnDefinitions><ColumnDefinition Width="270"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
         <ScrollViewer>
-            <StackPanel Grid.Column="0">
-                <Label Content="{Binding Path=StatusConnection}" Background="{Binding Path=ColorStatusConnection}"/>
+            <StackPanel Margin="10" IsEnabled="{Binding IsNotBusy}">
+                <Label Content="{Binding StatusConnection}" Background="{Binding ColorStatusConnection}"/>
                 <Label Content="{x:Static prop:Resources.StrNIC}"/>
-                <ComboBox ItemsSource="{Binding Path=Interface}" SelectedIndex="{Binding Path=SlctdInterface}"/>
+                <ComboBox ItemsSource="{Binding Interface}" SelectedIndex="{Binding SlctdInterface}" Margin="0,5"/>
+                
                 <Label Content="{x:Static prop:Resources.StrMyIP}"/>
                 <StackPanel Orientation="Horizontal">
-                    <TextBox Text="{Binding Path=Ip0}" Width="40"/>
-                    <Label Content="."/>
-                    <TextBox Text="{Binding Path=Ip1}" Width="40"/>
-                    <Label Content="."/>
-                    <TextBox Text="{Binding Path=Ip2}" Width="40"/>
-                    <Label Content="."/>
-                    <TextBox Text="{Binding Path=Ip3}" Width="40"/>
+                    <TextBox Text="{Binding Ip0}" Width="40"/><Label Content="."/>
+                    <TextBox Text="{Binding Ip1}" Width="40"/><Label Content="."/>
+                    <TextBox Text="{Binding Ip2}" Width="40"/><Label Content="."/>
+                    <TextBox Text="{Binding Ip3}" Width="40"/>
                 </StackPanel>
+
                 <Label Content="{x:Static prop:Resources.StrMySubnetMask}"/>
                 <StackPanel Orientation="Horizontal">
-                    <TextBox Text="{Binding Path=Msk0}" Width="40"/>
-                    <Label Content="."/>
-                    <TextBox Text="{Binding Path=Msk1}" Width="40"/>
-                    <Label Content="."/>
-                    <TextBox Text="{Binding Path=Msk2}" Width="40"/>
-                    <Label Content="."/>
-                    <TextBox Text="{Binding Path=Msk3}" Width="40"/>
+                    <TextBox Text="{Binding Msk0}" Width="40"/><Label Content="."/>
+                    <TextBox Text="{Binding Msk1}" Width="40"/><Label Content="."/>
+                    <TextBox Text="{Binding Msk2}" Width="40"/><Label Content="."/>
+                    <TextBox Text="{Binding Msk3}" Width="40"/>
                 </StackPanel>
+
                 <Label Content="{x:Static prop:Resources.StrMyGateway}"/>
                 <StackPanel Orientation="Horizontal">
-                    <TextBox Text="{Binding Path=Gate0}" Width="40"/>
-                    <Label Content="."/>
-                    <TextBox Text="{Binding Path=Gate1}" Width="40"/>
-                    <Label Content="."/>
-                    <TextBox Text="{Binding Path=Gate2}" Width="40"/>
-                    <Label Content="."/>
-                    <TextBox Text="{Binding Path=Gate3}" Width="40"/>
+                    <TextBox Text="{Binding Gate0}" Width="40"/><Label Content="."/>
+                    <TextBox Text="{Binding Gate1}" Width="40"/><Label Content="."/>
+                    <TextBox Text="{Binding Gate2}" Width="40"/><Label Content="."/>
+                    <TextBox Text="{Binding Gate3}" Width="40"/>
                 </StackPanel>
-                <CheckBox Content="{x:Static prop:Resources.StrDHCP}" IsChecked="{Binding Path=EnDhcp}"/>
+
+                <CheckBox Content="{x:Static prop:Resources.StrDHCP}" IsChecked="{Binding EnDhcp}" Margin="0,10"/>
+                
                 <StackPanel Orientation="Horizontal">
-                    <Button Content="{x:Static prop:Resources.StrReIP}" Command="{Binding Path=RefreshIPCommand}" Width="100"/>
-                    <Button Content="{x:Static prop:Resources.StrSetToAbove}" Command="{Binding Path=SetIPCommand}" Width="130"/>
+                    <Button Content="{x:Static prop:Resources.StrReIP}" Command="{Binding RefreshIPCommand}" Width="100" Margin="0,2"/>
+                    <Button Content="{x:Static prop:Resources.StrSetToAbove}" Command="{Binding SetIPCommand}" Width="120" Margin="5,2"/>
                 </StackPanel>
+                
+                <Separator Margin="0,10"/>
+                
                 <Label Content="{x:Static prop:Resources.StrDestIP}"/>
                 <StackPanel Orientation="Horizontal">
-                    <TextBox Text="{Binding Path=Ip0dst}" Width="40"/>
-                    <Label Content="."/>
-                    <TextBox Text="{Binding Path=Ip1dst}" Width="40"/>
-                    <Label Content="."/>
-                    <TextBox Text="{Binding Path=Ip2dst}" Width="40"/>
-                    <Label Content="."/>
-                    <TextBox Text="{Binding Path=Ip3dst}" Width="40"/>
+                    <TextBox Text="{Binding Ip0dst}" Width="40"/><Label Content="."/>
+                    <TextBox Text="{Binding Ip1dst}" Width="40"/><Label Content="."/>
+                    <TextBox Text="{Binding Ip2dst}" Width="40"/><Label Content="."/>
+                    <TextBox Text="{Binding Ip3dst}" Width="40"/>
                 </StackPanel>
+
                 <Label Content="{x:Static prop:Resources.StrPingTimeout}"/>
-                <TextBox Text="{Binding Path=Timeout_ms}"/>
-                <Button Content="{x:Static prop:Resources.StrPing}" Command="{Binding Path=PingCommand}"/>
-                <Button Content="{x:Static prop:Resources.StrIpconfig}" Command="{Binding Path=IpconfigCommand}"/>
-                <Button Content="{x:Static prop:Resources.StrCheckIPs}" Command="{Binding Path=PingAllCommand}"/>
-                <Label Content="{x:Static prop:Resources.StrPort}" Visibility="{Binding Path=ExistPortQry}"/>
-                <TextBox Text="{Binding Path=PortNum}" Visibility="{Binding Path=ExistPortQry}"/>
-                <Button Content="{x:Static prop:Resources.StrPortQry}" Command="{Binding Path=PortQryCommand}" Visibility="{Binding Path=ExistPortQry}"/>
+                <TextBox Text="{Binding Timeout_ms}"/>
+
+                <Button Content="{x:Static prop:Resources.StrPing}" Command="{Binding PingCommand}" Margin="0,2"/>
+                <Button Content="{x:Static prop:Resources.StrIpconfig}" Command="{Binding IpconfigCommand}" Margin="0,2"/>
+                <Button Content="{x:Static prop:Resources.StrCheckIPs}" Command="{Binding PingAllCommand}" Margin="0,2"/>
+                
+                <StackPanel Visibility="{Binding ExistPortQry}">
+                    <Label Content="{x:Static prop:Resources.StrPort}"/>
+                    <TextBox Text="{Binding PortNum}"/>
+                    <Button Content="{x:Static prop:Resources.StrPortQry}" Command="{Binding PortQryCommand}"/>
+                </StackPanel>
             </StackPanel>
         </ScrollViewer>
-        <TextBox Grid.Column="1" Text="{Binding Path=ResultText}" AcceptsReturn="True" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto" VerticalAlignment="Stretch" FontSize="16"/>
+        <TextBox Grid.Column="1" Text="{Binding ResultText}" AcceptsReturn="True" VerticalScrollBarVisibility="Auto" FontFamily="Consolas" FontSize="14" IsReadOnly="True"/>
     </Grid>
 </Window>

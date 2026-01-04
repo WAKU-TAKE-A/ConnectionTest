@@ -1,180 +1,34 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <root>
-  <!-- 
-    Microsoft ResX Schema 
-    
-    Version 2.0
-    
-    The primary goals of this format is to allow a simple XML format 
-    that is mostly human readable. The generation and parsing of the 
-    various data types are done through the TypeConverter classes 
-    associated with the data types.
-    
-    Example:
-    
-    ... ado.net/XML headers & schema ...
-    <resheader name="resmimetype">text/microsoft-resx</resheader>
-    <resheader name="version">2.0</resheader>
-    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
-    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
-    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
-    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
-    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
-        <value>[base64 mime encoded serialized .NET Framework object]</value>
-    </data>
-    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
-        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
-        <comment>This is a comment</comment>
-    </data>
-                
-    There are any number of "resheader" rows that contain simple 
-    name/value pairs.
-    
-    Each data row contains a name, and value. The row also contains a 
-    type or mimetype. Type corresponds to a .NET class that support 
-    text/value conversion through the TypeConverter architecture. 
-    Classes that don't support this are serialized and stored with the 
-    mimetype set.
-    
-    The mimetype is used for serialized objects, and tells the 
-    ResXResourceReader how to depersist the object. This is currently not 
-    extensible. For a given mimetype the value must be set accordingly:
-    
-    Note - application/x-microsoft.net.object.binary.base64 is the format 
-    that the ResXResourceWriter will generate, however the reader can 
-    read any of the formats listed below.
-    
-    mimetype: application/x-microsoft.net.object.binary.base64
-    value   : The object must be serialized with 
-            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
-            : and then encoded with base64 encoding.
-    
-    mimetype: application/x-microsoft.net.object.soap.base64
-    value   : The object must be serialized with 
-            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
-            : and then encoded with base64 encoding.
-
-    mimetype: application/x-microsoft.net.object.bytearray.base64
-    value   : The object must be serialized into a byte array 
-            : using a System.ComponentModel.TypeConverter
-            : and then encoded with base64 encoding.
-    -->
   <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
     <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
     <xsd:element name="root" msdata:IsDataSet="true">
       <xsd:complexType>
         <xsd:choice maxOccurs="unbounded">
-          <xsd:element name="metadata">
-            <xsd:complexType>
-              <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" />
-              </xsd:sequence>
-              <xsd:attribute name="name" use="required" type="xsd:string" />
-              <xsd:attribute name="type" type="xsd:string" />
-              <xsd:attribute name="mimetype" type="xsd:string" />
-              <xsd:attribute ref="xml:space" />
-            </xsd:complexType>
-          </xsd:element>
-          <xsd:element name="assembly">
-            <xsd:complexType>
-              <xsd:attribute name="alias" type="xsd:string" />
-              <xsd:attribute name="name" type="xsd:string" />
-            </xsd:complexType>
-          </xsd:element>
-          <xsd:element name="data">
-            <xsd:complexType>
-              <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
-                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
-              </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
-              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
-              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
-              <xsd:attribute ref="xml:space" />
-            </xsd:complexType>
-          </xsd:element>
-          <xsd:element name="resheader">
-            <xsd:complexType>
-              <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
-              </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required" />
-            </xsd:complexType>
-          </xsd:element>
+          <xsd:element name="metadata"><xsd:complexType><xsd:sequence><xsd:element name="value" type="xsd:string" minOccurs="0" /></xsd:sequence><xsd:attribute name="name" use="required" type="xsd:string" /><xsd:attribute name="type" type="xsd:string" /><xsd:attribute name="mimetype" type="xsd:string" /><xsd:attribute ref="xml:space" /></xsd:complexType></xsd:element>
+          <xsd:element name="assembly"><xsd:complexType><xsd:attribute name="alias" type="xsd:string" /><xsd:attribute name="name" type="xsd:string" /></xsd:complexType></xsd:element>
+          <xsd:element name="data"><xsd:complexType><xsd:sequence><xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" /><xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" /></xsd:sequence><xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" /><xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" /><xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" /><xsd:attribute ref="xml:space" /></xsd:complexType></xsd:element>
+          <xsd:element name="resheader"><xsd:complexType><xsd:sequence><xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" /></xsd:sequence><xsd:attribute name="name" type="xsd:string" use="required" /></xsd:complexType></xsd:element>
         </xsd:choice>
       </xsd:complexType>
     </xsd:element>
   </xsd:schema>
-  <resheader name="resmimetype">
-    <value>text/microsoft-resx</value>
-  </resheader>
-  <resheader name="version">
-    <value>2.0</value>
-  </resheader>
-  <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </resheader>
-  <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </resheader>
-  <data name="HelloWorld" xml:space="preserve">
-    <value>Hello!</value>
-  </data>
-  <data name="StrCheckIPs" xml:space="preserve">
-    <value>Check connectable IPs</value>
-  </data>
-  <data name="StrCon" xml:space="preserve">
-    <value>Connected</value>
-  </data>
-  <data name="StrDestIP" xml:space="preserve">
-    <value>Destination IP address</value>
-  </data>
-  <data name="StrDHCP" xml:space="preserve">
-    <value>Set DHCP to ON</value>
-  </data>
-  <data name="StrIpconfig" xml:space="preserve">
-    <value>Network status (ipconfig)</value>
-  </data>
-  <data name="StrMyGateway" xml:space="preserve">
-    <value>My gateway</value>
-  </data>
-  <data name="StrMyIP" xml:space="preserve">
-    <value>My IP address</value>
-  </data>
-  <data name="StrMySubnetMask" xml:space="preserve">
-    <value>My subnet mask</value>
-  </data>
-  <data name="StrNIC" xml:space="preserve">
-    <value>Network Adapter</value>
-  </data>
-  <data name="StrNotCon" xml:space="preserve">
-    <value>Not Connected</value>
-  </data>
-  <data name="StrPing" xml:space="preserve">
-    <value>Connection check (ping)</value>
-  </data>
-  <data name="StrPingTimeout" xml:space="preserve">
-    <value>Ping timeout (ms)</value>
-  </data>
-  <data name="StrPort" xml:space="preserve">
-    <value>Port number</value>
-  </data>
-  <data name="StrPortQry" xml:space="preserve">
-    <value>Check port (PortQry)</value>
-  </data>
-  <data name="StrQuestion" xml:space="preserve">
-    <value>Rewrite the “Network and Sharing Center” setting in the “Control Panel”. Is it OK?</value>
-  </data>
-  <data name="StrQuestionTwo" xml:space="preserve">
-    <value>Processing may take a few minutes. Do you want to process it?</value>
-  </data>
-  <data name="StrReIP" xml:space="preserve">
-    <value>Reacquire IP</value>
-  </data>
-  <data name="StrResPingAll" xml:space="preserve">
-    <value>The following IP addresses have been successfully pinged.</value>
-  </data>
-  <data name="StrSetToAbove" xml:space="preserve">
-    <value>Change to the above</value>
-  </data>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <data name="StrNIC" xml:space="preserve"><value>ネットワークアダプタ:</value></data>
+  <data name="StrMyIP" xml:space="preserve"><value>自身のIPアドレス:</value></data>
+  <data name="StrMySubnetMask" xml:space="preserve"><value>サブネットマスク:</value></data>
+  <data name="StrMyGateway" xml:space="preserve"><value>デフォルトゲートウェイ:</value></data>
+  <data name="StrDHCP" xml:space="preserve"><value>DHCPを有効にする</value></data>
+  <data name="StrReIP" xml:space="preserve"><value>情報の更新</value></data>
+  <data name="StrSetToAbove" xml:space="preserve"><value>上記設定を反映</value></data>
+  <data name="StrDestIP" xml:space="preserve"><value>宛先IPアドレス:</value></data>
+  <data name="StrPingTimeout" xml:space="preserve"><value>タイムアウト(ms):</value></data>
+  <data name="StrPing" xml:space="preserve"><value>Ping実行</value></data>
+  <data name="StrIpconfig" xml:space="preserve"><value>ipconfig実行</value></data>
+  <data name="StrCheckIPs" xml:space="preserve"><value>一斉Ping</value></data>
+  <data name="StrPort" xml:space="preserve"><value>ポート番号:</value></data>
+  <data name="StrPortQry" xml:space="preserve"><value>PortQry実行</value></data>
 </root>
