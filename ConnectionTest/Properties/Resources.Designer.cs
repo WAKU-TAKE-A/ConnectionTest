@@ -42,5 +42,10 @@ namespace ConnectionTest.Properties {
         public static string StrCheckIPs => ResourceManager.GetString("StrCheckIPs", resourceCulture) ?? "";
         public static string StrPort => ResourceManager.GetString("StrPort", resourceCulture) ?? "";
         public static string StrPortQry => ResourceManager.GetString("StrPortQry", resourceCulture) ?? "";
+        
+        // 新しく追加したメッセージ用の定義
+        public static string MsgConfirmIPChange => ResourceManager.GetString("MsgConfirmIPChange", resourceCulture) ?? "";
+        public static string MsgConfirmPingAll => ResourceManager.GetString("MsgConfirmPingAll", resourceCulture) ?? "";
+        public static string MsgConfirm => ResourceManager.GetString("MsgConfirm", resourceCulture) ?? "";
     }
 }

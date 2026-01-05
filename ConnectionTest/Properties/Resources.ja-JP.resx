@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <data name="StrNIC" xml:space="preserve"><value>ネットワークアダプタ:</value></data>
+  <data name="StrMyIP" xml:space="preserve"><value>自身のIPアドレス:</value></data>
+  <data name="StrMySubnetMask" xml:space="preserve"><value>サブネットマスク:</value></data>
+  <data name="StrMyGateway" xml:space="preserve"><value>デフォルトゲートウェイ:</value></data>
+  <data name="StrDHCP" xml:space="preserve"><value>DHCPを有効にする</value></data>
+  <data name="StrReIP" xml:space="preserve"><value>情報の更新</value></data>
+  <data name="StrSetToAbove" xml:space="preserve"><value>上記設定を反映</value></data>
+  <data name="StrDestIP" xml:space="preserve"><value>宛先IPアドレス:</value></data>
+  <data name="StrPingTimeout" xml:space="preserve"><value>タイムアウト(ms):</value></data>
+  <data name="StrPing" xml:space="preserve"><value>Ping実行</value></data>
+  <data name="StrIpconfig" xml:space="preserve"><value>ipconfig実行</value></data>
+  <data name="StrCheckIPs" xml:space="preserve"><value>一斉Ping</value></data>
+  <data name="StrPort" xml:space="preserve"><value>ポート番号:</value></data>
+  <data name="StrPortQry" xml:space="preserve"><value>PortQry実行</value></data>
+  <data name="MsgConfirmIPChange" xml:space="preserve"><value>IPアドレスを変更しますか？</value></data>
+  <data name="MsgConfirmPingAll" xml:space="preserve"><value>{0} ～ {1} に対してPingを実行しますか？</value></data>
+  <data name="MsgConfirm" xml:space="preserve"><value>確認</value></data>
+</root>

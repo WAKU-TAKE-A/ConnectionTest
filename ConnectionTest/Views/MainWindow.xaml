@@ -4,7 +4,7 @@
         xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
         xmlns:vm="clr-namespace:ConnectionTest.ViewModels"
         xmlns:prop="clr-namespace:ConnectionTest.Properties"
-        Title="{Binding MyVersion}" Height="600" Width="720">
+        Title="{Binding MyVersion}" Height="620" Width="720">
     <Window.DataContext><vm:MainWindowViewModel/></Window.DataContext>
     <Window.InputBindings><KeyBinding Gesture="Ctrl+I" Command="{Binding ChangeInitIPCommand}"/></Window.InputBindings>
     <i:Interaction.Triggers>

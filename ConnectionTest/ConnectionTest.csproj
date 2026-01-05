@@ -5,7 +5,7 @@
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
     <ImplicitUsings>enable</ImplicitUsings>
-    <Version>0.9.17.0</Version>
+    <Version>0.9.18.0</Version>
     <Authors>WAKU-TAKE-A</Authors>
     <Copyright>(C) 2019 WAKU-TAKE-A</Copyright>
     <GenerateAssemblyInfo>true</GenerateAssemblyInfo>

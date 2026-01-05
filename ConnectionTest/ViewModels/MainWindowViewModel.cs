@@ -11,6 +11,7 @@ using System.Xml.Serialization;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using ConnectionTest.Models;
+using ConnectionTest.Properties;
 
 namespace ConnectionTest.ViewModels;
 
@@ -28,13 +29,10 @@ public partial class MainWindowViewModel : ObservableObject
     [ObservableProperty] private string _colorStatusConnection = "Red";
     [ObservableProperty] private List<string> _interface = new();
     [ObservableProperty] private int _slctdInterface = -1;
-    
     [ObservableProperty] private bool _isNotBusy = true;
-
     [ObservableProperty] private int _ip0=192, _ip1=168, _ip2=0, _ip3=0;
     [ObservableProperty] private int _msk0=255, _msk1=255, _msk2=255, _msk3=0;
     [ObservableProperty] private int _gate0=0, _gate1=0, _gate2=0, _gate3=0;
-    
     [ObservableProperty] private bool _enDhcp = false;
     [ObservableProperty] private int _ip0dst=192, _ip1dst=168, _ip2dst=0, _ip3dst=0;
     [ObservableProperty] private int _timeout_ms = 200;
@@ -47,10 +45,7 @@ public partial class MainWindowViewModel : ObservableObject
         var asm = Assembly.GetExecutingAssembly();
         var ver = asm.GetName().Version;
         MyVersion = $"ConnectionTest {ver?.ToString(4) ?? "0.0.0.0"}_{(Environment.Is64BitProcess ? "x64" : "x86")}";
-        
-        // 起動時に設定ファイルを読み込む
         LoadSettings();
-        
         CheckStatusConnection();
         NetworkChange.NetworkAvailabilityChanged += (s, e) => Application.Current.Dispatcher.Invoke(CheckStatusConnection);
         NetworkChange.NetworkAddressChanged += (s, e) => Application.Current.Dispatcher.Invoke(CheckStatusConnection);
@@ -99,19 +94,14 @@ public partial class MainWindowViewModel : ObservableObject
     {
         info.RefreshNetworkInterface();
         Interface = new List<string>(info.Interface);
-        
         if (Interface.Count > 0) {
             int targetIdx = 0;
             for(int i=0; i < info.IP.Count; i++) {
-                if (!info.IP[i].StartsWith("169.254")) {
-                    targetIdx = i;
-                    break;
-                }
+                if (!info.IP[i].StartsWith("169.254")) { targetIdx = i; break; }
             }
             SlctdInterface = targetIdx;
             OnSlctdInterfaceChanged(SlctdInterface);
         } else {
-            ResultText = "有効なネットワークアダプタが見つかりませんでした。";
             SlctdInterface = -1;
         }
         PortQryCommand.NotifyCanExecuteChanged();
@@ -120,7 +110,7 @@ public partial class MainWindowViewModel : ObservableObject
     [RelayCommand]
     private async Task SetIP()
     {
-        if (MessageBox.Show("IPアドレスを変更しますか？", "確認", MessageBoxButton.YesNo) == MessageBoxResult.No) return;
+        if (MessageBox.Show(Resources.MsgConfirmIPChange, Resources.MsgConfirm, MessageBoxButton.YesNo) == MessageBoxResult.No) return;
         if (SlctdInterface < 0) return;
 
         IsNotBusy = false;
@@ -159,12 +149,15 @@ public partial class MainWindowViewModel : ObservableObject
     [RelayCommand]
     private async Task PingAll()
     {
-        if (MessageBox.Show("全てのIPアドレスに対してPingを実行しますか？", "確認", MessageBoxButton.YesNo) == MessageBoxResult.No) return;
+        string startIp = $"{Ip0}.{Ip1}.{Ip2}.1";
+        string endIp = $"{Ip0}.{Ip1}.{Ip2}.254";
+        string confirmMsg = string.Format(Resources.MsgConfirmPingAll, startIp, endIp);
+
+        if (MessageBox.Show(confirmMsg, Resources.MsgConfirm, MessageBoxButton.YesNo) == MessageBoxResult.No) return;
         
         IsNotBusy = false;
         Mouse.OverrideCursor = Cursors.Wait;
         var results = new System.Collections.Concurrent.ConcurrentBag<string>();
-        
         await Task.Run(() => Parallel.For(1, 255, i => {
             string targetIp = $"{Ip0}.{Ip1}.{Ip2}.{i}";
             using var p = new Ping();
@@ -172,22 +165,15 @@ public partial class MainWindowViewModel : ObservableObject
                 var reply = p.Send(targetIp, Timeout_ms);
                 if (reply.Status == IPStatus.Success) {
                     int ttl = reply.Options?.Ttl ?? 0;
-                    string type = ttl switch {
-                        <= 64  => "(Linux/Cam)",
-                        <= 128 => "(Windows)  ",
-                        _      => "(NetDevice) "
-                    };
+                    // (Linux/Camera) に変更
+                    string type = ttl switch { <= 64 => "(Linux/Camera)", <= 128 => "(Windows)     ", _ => "(NetDevice)   " };
                     results.Add($"{targetIp,-15} {type}");
                 }
             } catch {}
         }));
-        
-        var sortedList = results.OrderBy(s => {
-            var parts = s.Split(' ')[0].Split('.');
-            return int.Parse(parts[3]);
-        });
-
-        ResultText = "一斉Ping 結果 (種別はTTLによる推定):\r\n" + string.Join("\r\n", sortedList);
+        var sortedList = results.OrderBy(s => int.Parse(s.Split(' ')[0].Split('.')[3]));
+        ResultText = (Resources.Culture?.Name.StartsWith("ja") == true ? "一斉Ping 結果 (種別はTTLによる推定):\r\n" : "Ping All Results (Estimated by TTL):\r\n") 
+                     + string.Join("\r\n", sortedList);
         Mouse.OverrideCursor = null;
         IsNotBusy = true;
     }
@@ -199,7 +185,7 @@ public partial class MainWindowViewModel : ObservableObject
         Mouse.OverrideCursor = Cursors.Wait;
         string targetIp = $"{Ip0dst}.{Ip1dst}.{Ip2dst}.{Ip3dst}";
         string rawCommand = $"cd /d \"{APPL_DNAME}\" && {FNM_PORTQRY} -n {targetIp} -p tcp -e {PortNum}";
-        ResultText = "PortQry 実行中...\r\n";
+        ResultText = Resources.Culture?.Name.StartsWith("ja") == true ? "PortQry 実行中...\r\n" : "Running PortQry...\r\n";
         await Task.Run(() => cmd.Run(rawCommand));
         ResultText = cmd.StandardOutput;
         Mouse.OverrideCursor = null;
@@ -219,40 +205,29 @@ public partial class MainWindowViewModel : ObservableObject
     private void LoadSettings()
     {
         string path = Path.Combine(APPL_DNAME, FNM_INIT_XML);
-        try
-        {
-            if (File.Exists(path))
-            {
+        try {
+            if (File.Exists(path)) {
                 var serializer = new XmlSerializer(typeof(InitIp));
                 using var sr = new StreamReader(path);
-                if (serializer.Deserialize(sr) is InitIp config)
-                {
+                if (serializer.Deserialize(sr) is InitIp config) {
                     Ip0 = config.Ip0; Ip1 = config.Ip1; Ip2 = config.Ip2; Ip3 = config.Ip3;
                     Msk0 = config.Msk0; Msk1 = config.Msk1; Msk2 = config.Msk2; Msk3 = config.Msk3;
                     Gate0 = config.Gate0; Gate1 = config.Gate1; Gate2 = config.Gate2; Gate3 = config.Gate3;
                     Ip0dst = config.Ip0dst; Ip1dst = config.Ip1dst; Ip2dst = config.Ip2dst; Ip3dst = config.Ip3dst;
-                    ResultText = $"設定ファイル({FNM_INIT_XML})を読み込みました。";
+                    // 起動時等のログ出力を削除
                 }
+            } else {
+                SaveSettings();
+                // 起動時等のログ出力を削除
             }
-            else
-            {
-                SaveSettings(); // ファイルがない場合は現在の値を保存して作成
-                ResultText = $"設定ファイルが見つからないため、デフォルト値を {FNM_INIT_XML} として作成しました。";
-            }
-        }
-        catch (Exception ex)
-        {
-            ResultText = $"設定ファイルの読み込みに失敗しました: {ex.Message}";
-        }
+        } catch { }
     }
 
     private void SaveSettings()
     {
         string path = Path.Combine(APPL_DNAME, FNM_INIT_XML);
-        try
-        {
-            var config = new InitIp
-            {
+        try {
+            var config = new InitIp {
                 Ip0 = Ip0, Ip1 = Ip1, Ip2 = Ip2, Ip3 = Ip3,
                 Msk0 = Msk0, Msk1 = Msk1, Msk2 = Msk2, Msk3 = Msk3,
                 Gate0 = Gate0, Gate1 = Gate1, Gate2 = Gate2, Gate3 = Gate3,
@@ -261,7 +236,6 @@ public partial class MainWindowViewModel : ObservableObject
             var serializer = new XmlSerializer(typeof(InitIp));
             using var sw = new StreamWriter(path);
             serializer.Serialize(sw, config);
-        }
-        catch { }
+        } catch { }
     }
 }
