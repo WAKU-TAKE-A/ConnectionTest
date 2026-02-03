@@ -15,7 +15,7 @@
   <data name="StrPingTimeout" xml:space="preserve"><value>タイムアウト(ms):</value></data>
   <data name="StrPing" xml:space="preserve"><value>Ping実行</value></data>
   <data name="StrIpconfig" xml:space="preserve"><value>ipconfig実行</value></data>
-  <data name="StrCheckIPs" xml:space="preserve"><value>一斉Ping</value></data>
+  <data name="StrCheckIPs" xml:space="preserve"><value>全てにPing</value></data>
   <data name="StrPort" xml:space="preserve"><value>ポート番号:</value></data>
   <data name="StrPortQry" xml:space="preserve"><value>PortQry実行</value></data>
   <data name="MsgConfirmIPChange" xml:space="preserve"><value>IPアドレスを変更しますか？</value></data>

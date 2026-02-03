@@ -1,5 +1,6 @@
 using System;
 using System.Diagnostics;
+using System.Text;
 using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace ConnectionTest.Models;
@@ -20,6 +21,11 @@ public partial class DosCommand : ObservableObject
             p.StartInfo.RedirectStandardInput = false;
             p.StartInfo.CreateNoWindow = true;
             p.StartInfo.Arguments = "/c " + command;
+
+            // Shift-JIS (CP932) のエンコーディングを明示的に指定して文字化けを防ぐ
+            // .NET 8環境でShift-JISを使用するために、念のためプロバイダも考慮
+            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+            p.StartInfo.StandardOutputEncoding = Encoding.GetEncoding("shift-jis");
 
             bret = p.Start();
             StandardOutput = p.StandardOutput.ReadToEnd();
