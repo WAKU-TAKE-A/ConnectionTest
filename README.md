@@ -30,7 +30,7 @@
 #### デバイス推定の仕様
 | TTL値 | 推定種別 | 該当する主なデバイス |
 | :--- | :--- | :--- |
-| 64以下 | Linux / Cam | ネットワークカメラ、Linuxサーバー、IoT機器など |
+| 64以下 | Linux / NetworkCamera | ネットワークカメラ、Linuxサーバー、IoT機器など |
 | 65〜128 | Windows | Windows PC, Windows Server など |
 | 129以上 | NetDevice | ルーター、L3スイッチなどのネットワークインフラ機器 |
 

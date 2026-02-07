@@ -166,7 +166,7 @@ public partial class MainWindowViewModel : ObservableObject
                 if (reply.Status == IPStatus.Success) {
                     int ttl = reply.Options?.Ttl ?? 0;
                     // (Linux/Camera) に変更
-                    string type = ttl switch { <= 64 => "(Linux/Camera)", <= 128 => "(Windows)     ", _ => "(NetDevice)   " };
+                    string type = ttl switch { <= 64 => "(Linux/NetworkCamera)", <= 128 => "(Windows)     ", _ => "(NetDevice)   " };
                     results.Add($"{targetIp,-15} {type}");
                 }
             } catch {}
