@@ -8,7 +8,6 @@ namespace ConnectionTest.Models;
 
 public partial class DosCommand : ObservableObject
 {
-    // Windows API: システムの現在の ANSI コードページを取得する
     [DllImport("kernel32.dll")]
     private static extern uint GetACP();
 
@@ -25,33 +24,35 @@ public partial class DosCommand : ObservableObject
             p.StartInfo.UseShellExecute = false;
             p.StartInfo.RedirectStandardOutput = true;
             p.StartInfo.RedirectStandardError = true;
-            p.StartInfo.RedirectStandardInput = false;
             p.StartInfo.CreateNoWindow = true;
 
-            // エンコーディングの設定
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+            Encoding targetEncoding;
+
+            // システムのACP（通常932）を取得
             uint cp = GetACP();
-            Encoding encoding;
-            try
+            Encoding acpEncoding = (cp != 0) ? Encoding.GetEncoding((int)cp) : Encoding.UTF8;
+
+            // OSバージョンの判定（Windows 10は MajorVersion 10 かつ Build 22000未満）
+            bool isWin10OrLower = Environment.OSVersion.Version.Major < 10 ||
+                                 (Environment.OSVersion.Version.Major == 10 && Environment.OSVersion.Version.Build < 22000);
+
+            if (command.Contains("netsh", StringComparison.OrdinalIgnoreCase))
             {
-                encoding = (cp != 0) ? Encoding.GetEncoding((int)cp) : Encoding.UTF8;
+                // Win10以前のnetshはACP(932)、それ以降（Win11等）はUTF-8で処理
+                targetEncoding = isWin10OrLower ? acpEncoding : new UTF8Encoding(false);
             }
-            catch
+            else
             {
-                encoding = Encoding.UTF8;
+                // netsh以外（ipconfig等）は基本的にACPに従う
+                targetEncoding = acpEncoding;
             }
 
-            p.StartInfo.StandardOutputEncoding = encoding;
-            p.StartInfo.StandardErrorEncoding = encoding;
+            p.StartInfo.StandardOutputEncoding = targetEncoding;
+            p.StartInfo.StandardErrorEncoding = targetEncoding;
 
             bret = p.Start();
-
-            // 標準出力とエラー出力をそれぞれ読み取って結合する
-            string output = p.StandardOutput.ReadToEnd();
-            string error = p.StandardError.ReadToEnd();
-
-            StandardOutput = output + error;
-
+            StandardOutput = p.StandardOutput.ReadToEnd() + p.StandardError.ReadToEnd();
             p.WaitForExit();
         }
         catch (Exception ex)
