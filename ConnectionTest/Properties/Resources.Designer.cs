@@ -47,5 +47,8 @@ namespace ConnectionTest.Properties {
         public static string MsgConfirmIPChange => ResourceManager.GetString("MsgConfirmIPChange", resourceCulture) ?? "";
         public static string MsgConfirmPingAll => ResourceManager.GetString("MsgConfirmPingAll", resourceCulture) ?? "";
         public static string MsgConfirm => ResourceManager.GetString("MsgConfirm", resourceCulture) ?? "";
+        public static string StrEnableAdapter => ResourceManager.GetString("StrEnableAdapter", resourceCulture) ?? "";
+        public static string StrAdmin => ResourceManager.GetString("StrAdmin", resourceCulture) ?? "";
+        public static string StrAbnormalEnd => ResourceManager.GetString("StrAbnormalEnd", resourceCulture) ?? "";
     }
 }

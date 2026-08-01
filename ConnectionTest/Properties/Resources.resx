@@ -21,4 +21,7 @@
   <data name="MsgConfirmIPChange" xml:space="preserve"><value>Do you want to change the IP address?</value></data>
   <data name="MsgConfirmPingAll" xml:space="preserve"><value>Run Ping for {0} to {1}?</value></data>
   <data name="MsgConfirm" xml:space="preserve"><value>Confirmation</value></data>
+  <data name="StrEnableAdapter" xml:space="preserve"><value>Enable Adapter</value></data>
+  <data name="StrAdmin" xml:space="preserve"><value>[Admin]</value></data>
+  <data name="StrAbnormalEnd" xml:space="preserve"><value>{0} ended abnormally: {1}</value></data>
 </root>

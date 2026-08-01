@@ -21,4 +21,7 @@
   <data name="MsgConfirmIPChange" xml:space="preserve"><value>IPアドレスを変更しますか？</value></data>
   <data name="MsgConfirmPingAll" xml:space="preserve"><value>{0} ～ {1} に対してPingを実行しますか？</value></data>
   <data name="MsgConfirm" xml:space="preserve"><value>確認</value></data>
+  <data name="StrEnableAdapter" xml:space="preserve"><value>アダプタを有効にする</value></data>
+  <data name="StrAdmin" xml:space="preserve"><value>[管理者]</value></data>
+  <data name="StrAbnormalEnd" xml:space="preserve"><value>{0}は異常終了しました: {1}</value></data>
 </root>

@@ -21,7 +21,7 @@
                 <ComboBox ItemsSource="{Binding Interface}" SelectedIndex="{Binding SlctdInterface}" Margin="0,5"/>
                 
                 <Label Content="{x:Static prop:Resources.StrMyIP}"/>
-                <StackPanel Orientation="Horizontal">
+                <StackPanel Orientation="Horizontal" IsEnabled="{Binding IsAdapterEnabled}">
                     <TextBox Text="{Binding Ip0}" Width="40"/><Label Content="."/>
                     <TextBox Text="{Binding Ip1}" Width="40"/><Label Content="."/>
                     <TextBox Text="{Binding Ip2}" Width="40"/><Label Content="."/>
@@ -29,7 +29,7 @@
                 </StackPanel>
 
                 <Label Content="{x:Static prop:Resources.StrMySubnetMask}"/>
-                <StackPanel Orientation="Horizontal">
+                <StackPanel Orientation="Horizontal" IsEnabled="{Binding IsAdapterEnabled}">
                     <TextBox Text="{Binding Msk0}" Width="40"/><Label Content="."/>
                     <TextBox Text="{Binding Msk1}" Width="40"/><Label Content="."/>
                     <TextBox Text="{Binding Msk2}" Width="40"/><Label Content="."/>
@@ -37,14 +37,15 @@
                 </StackPanel>
 
                 <Label Content="{x:Static prop:Resources.StrMyGateway}"/>
-                <StackPanel Orientation="Horizontal">
+                <StackPanel Orientation="Horizontal" IsEnabled="{Binding IsAdapterEnabled}">
                     <TextBox Text="{Binding Gate0}" Width="40"/><Label Content="."/>
                     <TextBox Text="{Binding Gate1}" Width="40"/><Label Content="."/>
                     <TextBox Text="{Binding Gate2}" Width="40"/><Label Content="."/>
                     <TextBox Text="{Binding Gate3}" Width="40"/>
                 </StackPanel>
 
-                <CheckBox Content="{x:Static prop:Resources.StrDHCP}" IsChecked="{Binding EnDhcp}" Margin="0,10"/>
+                <CheckBox Content="{x:Static prop:Resources.StrDHCP}" IsChecked="{Binding EnDhcp}" IsEnabled="{Binding IsAdapterEnabled}" Margin="0,10"/>
+                <CheckBox Content="{x:Static prop:Resources.StrEnableAdapter}" IsChecked="{Binding EnAdapter}" Margin="0,0,0,10"/>
                 
                 <StackPanel Orientation="Horizontal">
                     <Button Content="{x:Static prop:Resources.StrReIP}" Command="{Binding RefreshIPCommand}" Width="100" Margin="0,2"/>

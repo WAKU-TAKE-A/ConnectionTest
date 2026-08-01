@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Net.NetworkInformation;
 using System.Reflection;
+using System.Security.Principal;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
@@ -34,6 +35,9 @@ public partial class MainWindowViewModel : ObservableObject
     [ObservableProperty] private int _msk0=255, _msk1=255, _msk2=255, _msk3=0;
     [ObservableProperty] private int _gate0=0, _gate1=0, _gate2=0, _gate3=0;
     [ObservableProperty] private bool _enDhcp = false;
+    [ObservableProperty] private bool _enAdapter = true;
+    [ObservableProperty] private bool _isAdapterEnabled = true;
+
     [ObservableProperty] private int _ip0dst=192, _ip1dst=168, _ip2dst=0, _ip3dst=0;
     [ObservableProperty] private int _timeout_ms = 200;
     [ObservableProperty] private string _resultText = "";
@@ -44,41 +48,73 @@ public partial class MainWindowViewModel : ObservableObject
     {
         var asm = Assembly.GetExecutingAssembly();
         var ver = asm.GetName().Version;
-        MyVersion = $"ConnectionTest {ver?.ToString(4) ?? "0.0.0.0"}_{(Environment.Is64BitProcess ? "x64" : "x86")}";
+        var adminStatus = IsRunningAsAdministrator() ? Resources.StrAdmin : "";
+        MyVersion = $"ConnectionTest {ver?.ToString(4) ?? "0.0.0.0"}_{(Environment.Is64BitProcess ? "x64" : "x86")} {adminStatus}";
         LoadSettings();
         CheckStatusConnection();
         NetworkChange.NetworkAvailabilityChanged += (s, e) => Application.Current.Dispatcher.Invoke(CheckStatusConnection);
         NetworkChange.NetworkAddressChanged += (s, e) => Application.Current.Dispatcher.Invoke(CheckStatusConnection);
     }
 
-    private void CheckStatusConnection()
+    private static bool IsRunningAsAdministrator()
+    {
+        using var identity = WindowsIdentity.GetCurrent();
+        var principal = new WindowsPrincipal(identity);
+        return principal.IsInRole(WindowsBuiltInRole.Administrator);
+    }
+    private int _refreshPending = 0;
+
+    private async void CheckStatusConnection()
     {
         bool available = NetworkInterface.GetIsNetworkAvailable();
         StatusConnection = available ? "Connected" : "Disconnected";
         ColorStatusConnection = available ? "LimeGreen" : "Red";
-        RefreshIP();
+        
+        // 要求が既に入っていれば何もしない（重複実行を防ぐ）
+        if (System.Threading.Interlocked.Exchange(ref _refreshPending, 1) == 1)
+            return;
+
+        try
+        {
+            // 要求がある限りループする（処理中に新たなイベントが来た場合はもう1周する）
+            while (System.Threading.Interlocked.Exchange(ref _refreshPending, 0) == 1)
+            {
+                await RefreshIP();
+            }
+        }
+        catch { }
     }
 
     partial void OnSlctdInterfaceChanged(int value)
     {
         if (value >= 0 && value < info.IP.Count)
         {
-            if (info.IP[value] != null) {
+            EnDhcp = info.DhcpEnabled[value];
+            EnAdapter = info.IsEnabled[value];
+            IsAdapterEnabled = info.IsEnabled[value];
+
+            if (!string.IsNullOrEmpty(info.IP[value])) {
                 var v = info.IP[value].Split('.');
                 if(v.Length == 4) {
                     Ip0 = int.Parse(v[0]); Ip1 = int.Parse(v[1]); Ip2 = int.Parse(v[2]); Ip3 = int.Parse(v[3]);
                 }
+            } else {
+                Ip0 = Ip1 = Ip2 = Ip3 = 0;
             }
-            if (info.SubnetMask[value] != null) {
+            
+            if (!string.IsNullOrEmpty(info.SubnetMask[value])) {
                 var v = info.SubnetMask[value].Split('.');
                 if(v.Length == 4) {
                     Msk0 = int.Parse(v[0]); Msk1 = int.Parse(v[1]); Msk2 = int.Parse(v[2]); Msk3 = int.Parse(v[3]);
                 }
+            } else {
+                Msk0 = Msk1 = Msk2 = Msk3 = 0;
             }
+            
             if (info.Gateway.Count > value) {
-                var gStr = info.Gateway[value];
-                if (!string.IsNullOrEmpty(gStr)) {
-                    var v = gStr.Split('.');
+                var gw = info.Gateway[value];
+                if (!string.IsNullOrEmpty(gw)) {
+                    var v = gw.Split('.');
                     if(v.Length == 4) {
                         Gate0 = int.Parse(v[0]); Gate1 = int.Parse(v[1]); Gate2 = int.Parse(v[2]); Gate3 = int.Parse(v[3]);
                         return;
@@ -90,21 +126,40 @@ public partial class MainWindowViewModel : ObservableObject
     }
 
     [RelayCommand]
-    private void RefreshIP()
+    private async Task RefreshIP()
     {
-        info.RefreshNetworkInterface();
-        Interface = new List<string>(info.Interface);
-        if (Interface.Count > 0) {
-            int targetIdx = 0;
-            for(int i=0; i < info.IP.Count; i++) {
-                if (!info.IP[i].StartsWith("169.254")) { targetIdx = i; break; }
+        IsNotBusy = false;
+        Mouse.OverrideCursor = Cursors.Wait;
+
+        await FetchNetworkInfoCoreAsync();
+
+        Mouse.OverrideCursor = null;
+        IsNotBusy = true;
+    }
+
+    private readonly System.Threading.SemaphoreSlim _fetchLock = new(1, 1);
+
+    private async Task FetchNetworkInfoCoreAsync()
+    {
+        await _fetchLock.WaitAsync();
+        try {
+            await Task.Run(() => info.RefreshNetworkInterface());
+
+            Interface = new List<string>(info.Interface);
+            if (Interface.Count > 0) {
+                int targetIdx = 0;
+                for(int i=0; i < info.IP.Count; i++) {
+                    if (!string.IsNullOrEmpty(info.IP[i]) && !info.IP[i].StartsWith("169.254")) { targetIdx = i; break; }
+                }
+                SlctdInterface = targetIdx;
+                OnSlctdInterfaceChanged(SlctdInterface);
+            } else {
+                SlctdInterface = -1;
             }
-            SlctdInterface = targetIdx;
-            OnSlctdInterfaceChanged(SlctdInterface);
-        } else {
-            SlctdInterface = -1;
+            PortQryCommand.NotifyCanExecuteChanged();
+        } finally {
+            _fetchLock.Release();
         }
-        PortQryCommand.NotifyCanExecuteChanged();
     }
 
     [RelayCommand]
@@ -115,11 +170,36 @@ public partial class MainWindowViewModel : ObservableObject
 
         IsNotBusy = false;
         Mouse.OverrideCursor = Cursors.Wait;
-        string str_cmd = EnDhcp ? $"netsh interface ip set address \"{Interface[SlctdInterface]}\" dhcp"
-            : $"netsh interface ip set address \"{Interface[SlctdInterface]}\" static {Ip0}.{Ip1}.{Ip2}.{Ip3} {Msk0}.{Msk1}.{Msk2}.{Msk3} {Gate0}.{Gate1}.{Gate2}.{Gate3}";
-        await Task.Run(() => cmd.Run(str_cmd));
-        ResultText = cmd.StandardOutput;
-        RefreshIP();
+
+        bool isCurrentlyEnabled = info.IsEnabled[SlctdInterface];
+
+        if (!EnAdapter)
+        {
+            if (isCurrentlyEnabled)
+            {
+                await Task.Run(() => cmd.Run($"powershell -NoProfile -ExecutionPolicy Bypass -Command \"Disable-NetAdapter -Name '{Interface[SlctdInterface]}' -Confirm:$false\""));
+                ResultText = cmd.StandardOutput;
+            }
+            await RefreshIP();
+        }
+        else
+        {
+            if (!isCurrentlyEnabled)
+            {
+                await Task.Run(() => cmd.Run($"powershell -NoProfile -ExecutionPolicy Bypass -Command \"Enable-NetAdapter -Name '{Interface[SlctdInterface]}' -Confirm:$false\""));
+                ResultText = cmd.StandardOutput;
+                await RefreshIP();
+            }
+            else
+            {
+                string str_cmd = EnDhcp ? $"netsh interface ip set address \"{Interface[SlctdInterface]}\" dhcp"
+                    : $"netsh interface ip set address \"{Interface[SlctdInterface]}\" static {Ip0}.{Ip1}.{Ip2}.{Ip3} {Msk0}.{Msk1}.{Msk2}.{Msk3} {Gate0}.{Gate1}.{Gate2}.{Gate3}";
+                await Task.Run(() => cmd.Run(str_cmd));
+                ResultText = cmd.StandardOutput;
+                await RefreshIP();
+            }
+        }
+
         Mouse.OverrideCursor = null;
         IsNotBusy = true;
     }

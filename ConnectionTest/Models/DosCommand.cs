@@ -57,7 +57,7 @@ public partial class DosCommand : ObservableObject
         catch (Exception ex)
         {
             bret = false;
-            StandardOutput = $"{command}は異常終了しました: {ex.Message}";
+            StandardOutput = string.Format(Properties.Resources.StrAbnormalEnd, command, ex.Message);
         }
         return bret;
     }
