@@ -5,7 +5,7 @@ using System.Linq;
 using System.Net.NetworkInformation;
 using System.Net.Sockets;
 using System.Text.Json;
-using CommunityToolkit.Mvvm.ComponentModel;
+
 
 namespace ConnectionTest.Models;
 
@@ -19,7 +19,7 @@ public class AdapterDto
     public bool IsEnabled { get; set; }
 }
 
-public partial class MyNetworkInfo : ObservableObject
+public class MyNetworkInfo
 {
     public List<string> Interface { get; private set; } = new();
     public List<string> IP { get; private set; } = new();

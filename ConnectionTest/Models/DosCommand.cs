@@ -2,11 +2,11 @@ using System;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Text;
-using CommunityToolkit.Mvvm.ComponentModel;
+
 
 namespace ConnectionTest.Models;
 
-public partial class DosCommand : ObservableObject
+public class DosCommand
 {
     // Windows API: システムの現在の ANSI コードページを取得する
     [DllImport("kernel32.dll")]
