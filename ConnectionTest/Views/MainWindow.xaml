@@ -1,4 +1,4 @@
-<Window x:Class="ConnectionTest.Views.MainWindow"
+﻿<Window x:Class="ConnectionTest.Views.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
@@ -17,6 +17,7 @@
         <ScrollViewer>
             <StackPanel Margin="10" IsEnabled="{Binding IsNotBusy}">
                 <Label Content="{Binding StatusConnection}" Background="{Binding ColorStatusConnection}"/>
+                <TextBlock Text="{Binding NetworkInfoMessage}" TextWrapping="Wrap" Foreground="DarkRed"/>
                 <Label Content="{x:Static prop:Resources.StrNIC}"/>
                 <ComboBox ItemsSource="{Binding Interface}" SelectedIndex="{Binding SlctdInterface}" Margin="0,5"/>
                 

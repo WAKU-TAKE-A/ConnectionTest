@@ -4,5 +4,9 @@
 /.vs
 /ConnectionTest/obj
 /ConnectionTest/bin
+/ConnectionTest.Tests/bin
+/ConnectionTest.Tests/obj
 /save_ai_outputs.py
 /dual-model-operation-kit
+NETWORK-ERROR-HANDLING.md
+/ConnectionTest.Tests
