@@ -64,10 +64,9 @@ public class DosCommand
                 AppLog.Error("コマンド出力の文字コード取得", ex);
                 encoding = Encoding.UTF8;
             }
-            startInfo.StandardOutputEncoding = outputEncoding ?? encoding;
-            startInfo.StandardErrorEncoding = outputEncoding ?? encoding;
-            var result = await ProcessRunner.RunAsync(startInfo, timeout ?? TimeSpan.FromSeconds(60)).ConfigureAwait(false);
-            StandardOutput = result.Output + result.Error;
+            var result = await ProcessRunner.RunBytesAsync(startInfo, timeout ?? TimeSpan.FromSeconds(60)).ConfigureAwait(false);
+            StandardOutput = DecodeOutput(result.Output, outputEncoding, encoding)
+                + DecodeOutput(result.Error, outputEncoding, encoding);
             if (result.ExitCode == 0) return true;
             AppLog.Error($"コマンド実行: {operation}",
                 new InvalidOperationException($"ExitCode={result.ExitCode}\n{StandardOutput}"));
@@ -79,5 +78,16 @@ public class DosCommand
             StandardOutput = string.Format(Properties.Resources.StrAbnormalEnd, operation, ex.Message);
             return false;
         }
+    }
+
+    private static string DecodeOutput(byte[] bytes, Encoding? specifiedEncoding, Encoding fallbackEncoding)
+    {
+        if (specifiedEncoding != null)
+            return specifiedEncoding.GetString(bytes).TrimStart('\uFEFF');
+
+        // Windows tools may write UTF-8 or the system code page when output is redirected.
+        // Detect valid UTF-8 first so Japanese netsh messages do not become mojibake.
+        try { return new UTF8Encoding(false, true).GetString(bytes).TrimStart('\uFEFF'); }
+        catch (DecoderFallbackException) { return fallbackEncoding.GetString(bytes); }
     }
 }
